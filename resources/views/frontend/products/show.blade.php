@@ -232,7 +232,7 @@
                                     @endif
                                 </a>
                                 <div class="product-info">
-                                    <span class="product-category">{{ $related->category->name ?? 'Baby Care' }}</span>
+                                    <span class="product-category">{{ $related->category->name ?? 'Kids Clothing' }}</span>
                                     <h3 class="product-name">
                                         <a href="{{ route('products.show', $related->slug) }}">{{ $related->name }}</a>
                                     </h3>

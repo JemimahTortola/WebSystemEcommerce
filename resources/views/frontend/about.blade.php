@@ -28,7 +28,7 @@ $storeInfo = \App\Models\StoreInfo::first();
                         <p>{{ $storeInfo->store_description }}</p>
                     @else
                         <p>Welcome to TinyThreads, where we believe every child deserves the very best. Founded with a passion for quality and a love for little ones, we specialize in creating comfortable, safe, and stylish clothing for newborns to toddlers.</p>
-                        <p>Our collection features carefully selected materials that are gentle on delicate skin. From cozy sleepwear to everyday essentials, each piece is designed with your little one's comfort and safety in mind.</p>
+                        <p>Our collection features carefully selected materials that are gentle on delicate skin. From cozy sleepwear to everyday clothing, each piece is designed with your little one's comfort and safety in mind.</p>
                         <p>We understand that parents want nothing but the best for their children, which is why we rigorously test and carefully curate every product to ensure it meets our high standards.</p>
                     @endif
                 </div>
