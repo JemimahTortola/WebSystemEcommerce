@@ -15,7 +15,7 @@ class CreateStoreInfosTable extends Migration
     {
         Schema::create('store_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('store_name')->default('Lux Littles');
+            $table->string('store_name')->default('TinyThreads');
             $table->string('store_email')->nullable();
             $table->string('store_phone')->nullable();
             $table->text('store_address')->nullable();

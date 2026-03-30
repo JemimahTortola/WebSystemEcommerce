@@ -8,17 +8,33 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->string('hero_image')->nullable()->after('logo');
-            $table->string('hero_title')->nullable()->after('hero_image');
-            $table->string('hero_subtitle')->nullable()->after('hero_title');
-        });
+        if (Schema::hasTable('settings')) {
+            Schema::table('settings', function (Blueprint $table) {
+                if (!Schema::hasColumn('settings', 'hero_image')) {
+                    $table->string('hero_image')->nullable()->after('logo');
+                }
+                if (!Schema::hasColumn('settings', 'hero_title')) {
+                    $table->string('hero_title')->nullable()->after('hero_image');
+                }
+                if (!Schema::hasColumn('settings', 'hero_subtitle')) {
+                    $table->string('hero_subtitle')->nullable()->after('hero_title');
+                }
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn(['hero_image', 'hero_title', 'hero_subtitle']);
-        });
+        if (Schema::hasTable('settings')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $columns = [];
+                if (Schema::hasColumn('settings', 'hero_image')) $columns[] = 'hero_image';
+                if (Schema::hasColumn('settings', 'hero_title')) $columns[] = 'hero_title';
+                if (Schema::hasColumn('settings', 'hero_subtitle')) $columns[] = 'hero_subtitle';
+                if (!empty($columns)) {
+                    $table->dropColumn($columns);
+                }
+            });
+        }
     }
 };

@@ -11,7 +11,7 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('store_name')->default('Lux Littles');
+            $table->string('store_name')->default('TinyThreads');
             $table->string('store_email')->nullable();
             $table->string('store_phone')->nullable();
             $table->text('store_address')->nullable();
@@ -21,7 +21,7 @@ class CreateSettingsTable extends Migration
         });
         
         DB::table('settings')->insert([
-            'store_name' => 'Lux Littles',
+            'store_name' => 'TinyThreads',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
