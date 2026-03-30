@@ -13,7 +13,7 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'Lux Littles']);
+        $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'TinyThreads']);
         $heroEdit = HeroEdit::firstOrCreate(['id' => 1], []);
         $notifInfo = NotifInfo::firstOrCreate(['id' => 1], []);
 
@@ -22,7 +22,7 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'Lux Littles']);
+        $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'TinyThreads']);
         $heroEdit = HeroEdit::firstOrCreate(['id' => 1], []);
         $notifInfo = NotifInfo::firstOrCreate(['id' => 1], []);
 

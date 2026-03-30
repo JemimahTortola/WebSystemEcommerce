@@ -19,79 +19,81 @@ class DemoDataSeeder extends Seeder
         DB::table('cart_items')->delete();
         DB::table('carts')->delete();
         DB::table('products')->delete();
+        DB::table('categories')->delete();
         DB::table('users')->where('id', '!=', 1)->delete();
 
-        // Baby product data
+        // Create categories - Newborn to Toddler Clothing
+        $categories = [
+            ['name' => 'Newborn (0-3M)', 'slug' => 'newborn'],
+            ['name' => 'Baby (3-12M)', 'slug' => 'baby'],
+            ['name' => 'Toddler (1-3Y)', 'slug' => 'toddler'],
+            ['name' => 'Accessories', 'slug' => 'accessories'],
+        ];
+
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'name' => $category['name'],
+                'slug' => $category['slug'],
+                'description' => 'Clothing for little ones',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Newborn to Toddler Clothing products
         $products = [
-            ['name' => 'Soft Cotton Onesie Set', 'category' => 1, 'price' => 24.99, 'stock' => 45, 'desc' => 'Ultra-soft organic cotton onesie set for newborns. Perfect for everyday comfort.'],
-            ['name' => 'Knit Baby Beanie', 'category' => 1, 'price' => 12.99, 'stock' => 80, 'desc' => 'Cozy knit beanie to keep your little one warm.'],
-            ['name' => 'Burstterfly Print Romper', 'category' => 1, 'price' => 28.99, 'stock' => 35, 'desc' => 'Adorable butterfly print romper with snap buttons.'],
-            ['name' => 'Hooded Towel Set', 'category' => 1, 'price' => 34.99, 'stock' => 25, 'desc' => 'Super absorbent hooded towel set for bath time.'],
-            ['name' => 'Mittens with Scratch Prevention', 'category' => 1, 'price' => 9.99, 'stock' => 100, 'desc' => 'Soft cotton mittens to prevent scratching.'],
-            ['name' => 'Fleece Sleepsack', 'category' => 1, 'price' => 32.99, 'stock' => 40, 'desc' => 'Warm and cozy fleece sleepsack for peaceful nights.'],
-            ['name' => 'Bibs Pack of 6', 'category' => 1, 'price' => 18.99, 'stock' => 60, 'desc' => 'Waterproof bibs pack - easy to clean.'],
-            ['name' => 'Booties and Headband Set', 'category' => 1, 'price' => 22.99, 'stock' => 50, 'desc' => 'Matching booties and headband for your princess.'],
-            ['name' => 'Swaddle Blanket Muslin', 'category' => 1, 'price' => 26.99, 'stock' => 55, 'desc' => 'Breathable muslin swaddle blanket.'],
-            ['name' => 'Bodysuits 5-Pack', 'category' => 1, 'price' => 29.99, 'stock' => 70, 'desc' => 'Essential bodysuits 5-pack in various colors.'],
-            ['name' => 'Denim Overalls', 'category' => 2, 'price' => 38.99, 'stock' => 30, 'desc' => 'Cute denim overalls for toddlers.'],
-            ['name' => 'Rainbow Tutu Dress', 'category' => 2, 'price' => 32.99, 'stock' => 25, 'desc' => 'Sparkly tutu dress perfect for parties.'],
-            ['name' => 'Striped Leggings', 'category' => 2, 'price' => 16.99, 'stock' => 65, 'desc' => 'Comfortable striped leggings for everyday wear.'],
-            ['name' => 'Ruffle Sleeve Top', 'category' => 2, 'price' => 24.99, 'stock' => 40, 'desc' => 'Pretty ruffle sleeve top for little girls.'],
-            ['name' => 'Cargo Shorts Set', 'category' => 2, 'price' => 27.99, 'stock' => 35, 'desc' => 'Cool cargo shorts set for boys.'],
-            ['name' => 'Polo Shirt and Shorts', 'category' => 2, 'price' => 29.99, 'stock' => 45, 'desc' => 'Classic polo shirt with matching shorts.'],
-            ['name' => 'Floral Print Dress', 'category' => 2, 'price' => 35.99, 'stock' => 28, 'desc' => 'Beautiful floral print dress.'],
-            ['name' => 'Unicorn Costume', 'category' => 2, 'price' => 42.99, 'stock' => 20, 'desc' => 'Magical unicorn costume for dress-up.'],
-            ['name' => 'Dinosaur T-Shirt', 'category' => 2, 'price' => 18.99, 'stock' => 55, 'desc' => 'Roar-some dinosaur t-shirt for boys.'],
-            ['name' => 'Tiered Ruffle Dress', 'category' => 2, 'price' => 38.99, 'stock' => 22, 'desc' => 'Elegant tiered ruffle dress.'],
-            ['name' => 'Knit Cardigan', 'category' => 2, 'price' => 34.99, 'stock' => 40, 'desc' => 'Warm knit cardigan for layering.'],
-            ['name' => 'Camo Cargo Pants', 'category' => 2, 'price' => 29.99, 'stock' => 38, 'desc' => 'Adventure-ready camo cargo pants.'],
-            ['name' => 'Heart Sunglasses', 'category' => 2, 'price' => 12.99, 'stock' => 90, 'desc' => 'Trendy heart-shaped sunglasses.'],
-            ['name' => 'Bow Headband Set', 'category' => 2, 'price' => 14.99, 'stock' => 75, 'desc' => 'Adorable bow headband set.'],
-            ['name' => 'High-Top Sneakers', 'category' => 2, 'price' => 44.99, 'stock' => 30, 'desc' => 'Stylish high-top sneakers.'],
-            ['name' => 'Princess Party Dress', 'category' => 3, 'price' => 55.99, 'stock' => 15, 'desc' => 'Stunning princess party dress.'],
-            ['name' => 'Superhero Cape Set', 'category' => 3, 'price' => 32.99, 'stock' => 35, 'desc' => 'Become a superhero with this cape set.'],
-            ['name' => 'Pirate Costume', 'category' => 3, 'price' => 39.99, 'stock' => 20, 'desc' => 'Ahoy! Pirate costume for adventures.'],
-            ['name' => 'Ballet Tutu Outfit', 'category' => 3, 'price' => 36.99, 'stock' => 25, 'desc' => 'Perfect ballet tutu outfit.'],
-            ['name' => 'Firefighter Costume', 'category' => 3, 'price' => 38.99, 'stock' => 18, 'desc' => 'Realistic firefighter costume.'],
-            ['name' => 'Angel Wings Set', 'category' => 3, 'price' => 28.99, 'stock' => 40, 'desc' => 'Beautiful angel wings costume.'],
-            ['name' => 'Cowboy Outfit', 'category' => 3, 'price' => 42.99, 'stock' => 15, 'desc' => 'Yee-haw! Cowboy costume.'],
-            ['name' => 'Witch costume', 'category' => 3, 'price' => 34.99, 'stock' => 22, 'desc' => 'Spooky witch costume.'],
-            ['name' => 'Prince Costume', 'category' => 3, 'price' => 49.99, 'stock' => 12, 'desc' => 'Royal prince costume.'],
-            ['name' => 'Bumblebee Costume', 'category' => 3, 'price' => 36.99, 'stock' => 20, 'desc' => 'Cute bumblebee costume.'],
-            ['name' => 'Chef Costume Set', 'category' => 3, 'price' => 29.99, 'stock' => 30, 'desc' => 'Little chef costume set.'],
-            ['name' => 'Butterfly Wings', 'category' => 3, 'price' => 26.99, 'stock' => 45, 'desc' => 'Colorful butterfly wings.'],
-            ['name' => 'Robot Suit', 'category' => 3, 'price' => 54.99, 'stock' => 10, 'desc' => 'Futuristic robot suit.'],
-            ['name' => 'Fairy Dress', 'category' => 3, 'price' => 38.99, 'stock' => 25, 'desc' => 'Enchanting fairy dress.'],
-            ['name' => 'Spacesuit Costume', 'category' => 3, 'price' => 48.99, 'stock' => 15, 'desc' => 'Ready for space exploration.'],
-            ['name' => 'Winter Puffer Jacket', 'category' => 4, 'price' => 64.99, 'stock' => 30, 'desc' => 'Warm puffer jacket for winter.'],
-            ['name' => 'Rain Boots Dino Print', 'category' => 4, 'price' => 28.99, 'stock' => 40, 'desc' => 'Fun dinosaur print rain boots.'],
-            ['name' => 'Knit Scarf and Gloves', 'category' => 4, 'price' => 22.99, 'stock' => 55, 'desc' => 'Cozy knit scarf and gloves set.'],
-            ['name' => 'Beanie with Pom', 'category' => 4, 'price' => 18.99, 'stock' => 70, 'desc' => 'Fluffy beanie with pom-pom.'],
-            ['name' => 'Fleece Lined Leggings', 'category' => 4, 'price' => 24.99, 'stock' => 50, 'desc' => 'Warm fleece lined leggings.'],
-            ['name' => 'Down Vest', 'category' => 4, 'price' => 44.99, 'stock' => 35, 'desc' => 'Lightweight down vest for layering.'],
-            ['name' => 'Snowsuit One-Piece', 'category' => 4, 'price' => 74.99, 'stock' => 20, 'desc' => 'All-in-one snowsuit.'],
-            ['name' => 'Ugg-Style Boots', 'category' => 4, 'price' => 54.99, 'stock' => 25, 'desc' => 'Cozy ugg-style boots.'],
-            ['name' => 'Thermal Underwear Set', 'category' => 4, 'price' => 26.99, 'stock' => 60, 'desc' => 'Warm thermal underwear set.'],
-            ['name' => 'Knit Booties Winter', 'category' => 4, 'price' => 19.99, 'stock' => 65, 'desc' => 'Warm knit booties for winter.'],
-            ['name' => 'Diaper Cake Centerpiece', 'category' => 5, 'price' => 45.99, 'stock' => 30, 'desc' => 'Beautiful diaper cake centerpiece.'],
-            ['name' => 'Baby Gift Basket', 'category' => 5, 'price' => 59.99, 'stock' => 20, 'desc' => 'Complete baby gift basket.'],
-            ['name' => 'Milestone Cards Set', 'category' => 5, 'price' => 18.99, 'stock' => 50, 'desc' => 'Capture baby milestones.'],
-            ['name' => 'Silicone Feeding Set', 'category' => 5, 'price' => 28.99, 'stock' => 35, 'desc' => 'Safe silicone feeding set.'],
-            ['name' => 'Baby Memory Book', 'category' => 5, 'price' => 22.99, 'stock' => 40, 'desc' => 'Record precious memories.'],
-            ['name' => 'Teething Toy Set', 'category' => 5, 'price' => 16.99, 'stock' => 55, 'desc' => 'Soothing teething toys.'],
-            ['name' => 'Pacifier Clip Set', 'category' => 5, 'price' => 12.99, 'stock' => 70, 'desc' => 'Adorable pacifier clips.'],
-            ['name' => 'Bath Toy Set', 'category' => 5, 'price' => 24.99, 'stock' => 45, 'desc' => 'Fun bath time toys.'],
-            ['name' => 'Muslin Blankets 3-Pack', 'category' => 5, 'price' => 29.99, 'stock' => 40, 'desc' => 'Soft muslin blankets 3-pack.'],
-            ['name' => 'Sleep Sack Bear', 'category' => 5, 'price' => 36.99, 'stock' => 25, 'desc' => 'Cozy sleep sack with bear design.'],
+            // Newborn (0-3M) - category 1
+            ['name' => 'Soft Cotton Onesie Set', 'category' => 1, 'price' => 24.99, 'stock' => 45, 'desc' => 'Ultra-soft organic cotton onesie set for newborns. Perfect for everyday comfort. Includes 3 onesies.'],
+            ['name' => 'Knit Beanie Set', 'category' => 1, 'price' => 14.99, 'stock' => 80, 'desc' => 'Cozy knit beanie set to keep your little one warm. Set of 3 colors.'],
+            ['name' => 'Butterfly Print Romper', 'category' => 1, 'price' => 22.99, 'stock' => 35, 'desc' => 'Adorable butterfly print romper with snap buttons for easy dressing.'],
+            ['name' => 'Hooded Towel Set', 'category' => 1, 'price' => 34.99, 'stock' => 25, 'desc' => 'Super absorbent hooded towel set for bath time. Includes hooded towel and washcloth.'],
+            ['name' => 'Cotton Mittens', 'category' => 1, 'price' => 9.99, 'stock' => 100, 'desc' => 'Soft cotton mittens to prevent scratching. Adjustable wrist closure.'],
+            ['name' => 'Fleece Sleepsack', 'category' => 1, 'price' => 32.99, 'stock' => 40, 'desc' => 'Warm and cozy fleece sleepsack for peaceful nights. Reversible design.'],
+            ['name' => 'Bibs Pack of 6', 'category' => 1, 'price' => 18.99, 'stock' => 60, 'desc' => 'Waterproof dribble bibs pack - easy to clean. Set of 6.'],
+            ['name' => 'Booties and Headband Set', 'category' => 1, 'price' => 22.99, 'stock' => 50, 'desc' => 'Matching knit booties and headband set for your princess.'],
+            ['name' => 'Swaddle Blanket Muslin', 'category' => 1, 'price' => 26.99, 'stock' => 55, 'desc' => 'Breathable muslin swaddle blanket. Multiple uses as stroller cover or nursing cover.'],
+            ['name' => 'Bodysuits 5-Pack', 'category' => 1, 'price' => 29.99, 'stock' => 70, 'desc' => 'Essential bodysuits 5-pack in various colors. Snap closure for easy changes.'],
+
+            // Baby (3-12M) - category 2
+            ['name' => 'Denim Overalls', 'category' => 2, 'price' => 38.99, 'stock' => 30, 'desc' => 'Cute denim overalls for toddlers. Adjustable straps with metal buckles.'],
+            ['name' => 'Rainbow Tutu Dress', 'category' => 2, 'price' => 32.99, 'stock' => 25, 'desc' => 'Sparkly tutu dress perfect for parties. Layered tulle skirt.'],
+            ['name' => 'Striped Leggings', 'category' => 2, 'price' => 16.99, 'stock' => 65, 'desc' => 'Comfortable striped leggings for everyday wear. Stretchy cotton blend.'],
+            ['name' => 'Ruffle Sleeve Top', 'category' => 2, 'price' => 24.99, 'stock' => 40, 'desc' => 'Pretty ruffle sleeve top for little girls. Soft cotton fabric.'],
+            ['name' => 'Cargo Shorts Set', 'category' => 2, 'price' => 27.99, 'stock' => 35, 'desc' => 'Cool cargo shorts set for boys. Includes matching t-shirt.'],
+            ['name' => 'Polo Shirt and Shorts', 'category' => 2, 'price' => 29.99, 'stock' => 45, 'desc' => 'Classic polo shirt with matching cotton shorts. Perfect for smart casual.'],
+            ['name' => 'Floral Print Dress', 'category' => 2, 'price' => 35.99, 'stock' => 28, 'desc' => 'Beautiful floral print dress. Ruffled hemline.'],
+            ['name' => 'Unicorn Costume', 'category' => 2, 'price' => 42.99, 'stock' => 20, 'desc' => 'Magical unicorn costume for dress-up. Includes headband and tutu.'],
+            ['name' => 'Dinosaur T-Shirt', 'category' => 2, 'price' => 18.99, 'stock' => 55, 'desc' => 'Roar-some dinosaur t-shirt for boys. Funny graphic print.'],
+            ['name' => 'Tiered Ruffle Dress', 'category' => 2, 'price' => 38.99, 'stock' => 22, 'desc' => 'Elegant tiered ruffle dress. Perfect for special occasions.'],
+
+            // Toddler (1-3Y) - category 3
+            ['name' => 'Princess Party Dress', 'category' => 3, 'price' => 55.99, 'stock' => 15, 'desc' => 'Stunning princess party dress with sequins and tulle.'],
+            ['name' => 'Superhero Cape Set', 'category' => 3, 'price' => 32.99, 'stock' => 35, 'desc' => 'Become a superhero with this cape set. Includes mask and cuffs.'],
+            ['name' => 'Pirate Costume', 'category' => 3, 'price' => 39.99, 'stock' => 20, 'desc' => 'Ahoy! Pirate costume for little adventurers. Includes hat and eyepatch.'],
+            ['name' => 'Ballet Tutu Outfit', 'category' => 3, 'price' => 36.99, 'stock' => 25, 'desc' => 'Perfect ballet tutu outfit for little dancers.'],
+            ['name' => 'Firefighter Costume', 'category' => 3, 'price' => 38.99, 'stock' => 18, 'desc' => 'Realistic firefighter costume. Includes helmet and jacket.'],
+            ['name' => 'Cowboy Outfit', 'category' => 3, 'price' => 42.99, 'stock' => 15, 'desc' => 'Yee-haw! Complete cowboy costume with hat and vest.'],
+            ['name' => 'Prince Costume', 'category' => 3, 'price' => 49.99, 'stock' => 12, 'desc' => 'Royal prince costume. Includes cape and crown.'],
+            ['name' => 'Chef Costume Set', 'category' => 3, 'price' => 29.99, 'stock' => 30, 'desc' => 'Little chef costume set. Includes hat and apron.'],
+            ['name' => 'Fairy Dress', 'category' => 3, 'price' => 38.99, 'stock' => 25, 'desc' => 'Enchanting fairy dress with butterfly wings.'],
+            ['name' => 'Robot Suit', 'category' => 3, 'price' => 54.99, 'stock' => 10, 'desc' => 'Futuristic robot suit. Lights up and makes sounds!'],
+
+            // Accessories - category 4
+            ['name' => 'Winter Puffer Jacket', 'category' => 4, 'price' => 64.99, 'stock' => 30, 'desc' => 'Warm puffer jacket for winter. Water-resistant outer shell.'],
+            ['name' => 'Rain Boots Dino Print', 'category' => 4, 'price' => 28.99, 'stock' => 40, 'desc' => 'Fun dinosaur print rain boots. Non-slip sole.'],
+            ['name' => 'Knit Scarf and Gloves', 'category' => 4, 'price' => 22.99, 'stock' => 55, 'desc' => 'Cozy knit scarf and gloves set. Matching colors.'],
+            ['name' => 'Beanie with Pom', 'category' => 4, 'price' => 18.99, 'stock' => 70, 'desc' => 'Fluffy beanie with pom-pom. Sherpa lined for warmth.'],
+            ['name' => 'Fleece Lined Leggings', 'category' => 4, 'price' => 24.99, 'stock' => 50, 'desc' => 'Warm fleece lined leggings. Perfect for cold weather.'],
+            ['name' => 'Down Vest', 'category' => 4, 'price' => 44.99, 'stock' => 35, 'desc' => 'Lightweight down vest for layering. Packable design.'],
+            ['name' => 'Snowsuit One-Piece', 'category' => 4, 'price' => 74.99, 'stock' => 20, 'desc' => 'All-in-one snowsuit. Waterproof and windproof.'],
+            ['name' => 'Knit Booties', 'category' => 4, 'price' => 19.99, 'stock' => 65, 'desc' => 'Soft knit booties to keep tiny feet warm. Multiple colors.'],
+            ['name' => 'Sock Bundle', 'category' => 4, 'price' => 14.99, 'stock' => 70, 'desc' => 'Bundle of 6 pairs of soft cotton socks. Non-slip grips.'],
+            ['name' => 'Organic Bib Set', 'category' => 4, 'price' => 19.99, 'stock' => 55, 'desc' => 'Set of 4 organic cotton bibs. Easy to clean and machine washable.'],
         ];
 
         // Insert products
         $productIds = [];
         foreach ($products as $p) {
-            $category = DB::table('categories')->where('id', $p['category'])->first();
-            $categoryName = $category ? strtolower($category->name) : 'baby';
-            $imageUrl = "https://images.unsplash.com/photo-" . rand(1500000000000, 1600000000000) . "?w=400&h=400&fit=crop";
-            
             $id = DB::table('products')->insertGetId([
                 'category_id' => $p['category'],
                 'name' => $p['name'],
@@ -151,16 +153,16 @@ class DemoDataSeeder extends Seeder
 
         // Create reviews for products
         $reviewTexts = [
-            'Absolutely love this! Perfect quality and so cute on my baby.',
+            'Absolutely love this! Perfect quality and so cute on my little one.',
             'Great product, fast shipping, will buy again!',
-            'The material is so soft, my little one loves it.',
+            'The material is so soft, my child loves it.',
             'Beautiful design and great value for money.',
             'Exactly as pictured, highly recommend!',
-            'Perfect gift for new parents. Everyone loves it!',
+            'Perfect for little ones. Everyone loves it!',
             'Good quality but runs a bit small.',
             'Exceeded expectations! Will order more.',
             'Comfortable and stylish. Great for everyday use.',
-            'My baby looks adorable in this!',
+            'My child looks adorable in this!',
             'Very well made, worth every penny.',
             'Softest fabric ever! Must buy!',
             'Perfect for all occasions.',
