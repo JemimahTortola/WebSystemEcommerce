@@ -130,8 +130,7 @@
                                 @elseif($product->stock < 5)
                                     <span class="product-badge badge-low-stock">Low Stock</span>
                                 @endif
-                                <div class="product-image-wrapper">
-                                    <a href="{{ route('products.show', $product->slug) }}" class="product-image">
+                                <a href="{{ route('products.show', $product->slug) }}" class="product-image">
                                     @if($product->image)
                                         <img src="{{ asset('storage/products/' . $product->image) }}" alt="{{ $product->name }}" loading="lazy">
                                     @else
@@ -140,8 +139,7 @@
                                             <span>No Image</span>
                                         </div>
                                     @endif
-                                    </a>
-                                </div>
+                                </a>
                                 @auth
                                     <button class="product-wishlist" aria-label="Add to wishlist">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
