@@ -98,7 +98,7 @@
                             @endif
                         </a>
                         <div class="product-info">
-                            <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
+                            <span class="product-category">{{ $product->category->name ?? 'Newborn to Toddler' }}</span>
                             <h3 class="product-name">
                                 <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                             </h3>

@@ -40,7 +40,7 @@
                                     <h3 class="cart-item-name">
                                         <a href="{{ route('products.show', $item->product->slug) }}">{{ $item->product->name }}</a>
                                     </h3>
-                                    <span class="cart-item-category">{{ $item->product->category->name ?? 'Kids Clothing' }}</span>
+                                    <span class="cart-item-category">{{ $item->product->category->name ?? 'Newborn to Toddler' }}</span>
                                     <span class="cart-item-price">${{ number_format($item->price, 2) }}</span>
                                 </div>
                                 <div class="cart-item-quantity">

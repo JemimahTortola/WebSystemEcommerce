@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="product-info" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                    <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
+                    <span class="product-category">{{ $product->category->name ?? 'Newborn to Toddler' }}</span>
                     <h1 id="product-title" class="product-title" itemprop="name">{{ $product->name }}</h1>
                     
                     @if($product->reviews_count > 0)
@@ -232,7 +232,7 @@
                                     @endif
                                 </a>
                                 <div class="product-info">
-                                    <span class="product-category">{{ $related->category->name ?? 'Kids Clothing' }}</span>
+                                    <span class="product-category">{{ $related->category->name ?? 'Newborn to Toddler' }}</span>
                                     <h3 class="product-name">
                                         <a href="{{ route('products.show', $related->slug) }}">{{ $related->name }}</a>
                                     </h3>

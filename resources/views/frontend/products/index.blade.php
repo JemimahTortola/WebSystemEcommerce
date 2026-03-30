@@ -10,8 +10,8 @@
 <main class="shop-page">
     <section class="shop-hero">
         <div class="shop-hero-content">
-            <h1>Our Collection</h1>
-            <p>Discover adorable and comfortable clothing for your little ones from newborn to toddler</p>
+            <h1>Newborn to Toddler Clothing</h1>
+            <p>Discover adorable and comfortable clothing for your little ones</p>
         </div>
     </section>
 
@@ -41,7 +41,7 @@
                     @endif
 
                     <div class="filter-section">
-                        <p class="filter-label">Category</p>
+                        <p class="filter-label">Shop By Age</p>
                         <div class="filter-options">
                             @foreach($categories as $category)
                                 <label class="filter-option {{ request('category') == $category->id ? 'active' : '' }}">
@@ -145,7 +145,7 @@
                                     </button>
                                 @endauth
                                 <div class="product-info">
-                                    <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
+                                    <span class="product-category">{{ $product->category->name ?? 'Newborn to Toddler' }}</span>
                                     <h3 class="product-name">
                                         <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                                     </h3>
