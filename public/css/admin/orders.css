@@ -1,0 +1,146 @@
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-filters {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.header-filters .form-control {
+    width: auto;
+    min-width: 150px;
+}
+
+.header-filters-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.archive-toggle-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--light-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-item {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+}
+
+.list-header .header-item:nth-child(1) { width: 100px; }
+.list-header .header-item:nth-child(2) { flex: 1; min-width: 150px; }
+.list-header .header-item:nth-child(3) { width: 100px; }
+.list-header .header-item:nth-child(4) { width: 70px; }
+.list-header .header-item:nth-child(5) { width: 80px; }
+.list-header .header-item:nth-child(6) { width: 100px; }
+.list-header .header-item:nth-child(7) { width: 40px; }
+.list-header .header-item:nth-child(8) { width: 60px; }
+
+.list-items {
+    padding: 0;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s;
+}
+
+.list-item .item-id { width: 100px; }
+.list-item .item-customer { flex: 1; min-width: 150px; }
+.list-item .item-date { width: 100px; color: var(--text-light); font-size: 0.85rem; }
+.list-item .item-items { width: 70px; color: var(--text-light); font-size: 0.85rem; }
+.list-item .item-total { width: 80px; font-weight: 600; }
+.list-item .item-status { width: 100px; }
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-pending { background: #fef3c7; color: #d97706; }
+.status-processing { background: #dbeafe; color: #2563eb; }
+.status-shipped { background: #e0e7ff; color: #4f46e5; }
+.status-delivered { background: #dcfce7; color: #16a34a; }
+.status-cancelled { background: #fee2e2; color: #dc2626; }
+
+.item-archive {
+    width: 40px;
+}
+
+.archive-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toggle-track {
+    width: 36px;
+    height: 20px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.toggle-thumb {
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.archive-toggle:hover .toggle-track {
+    background: #d1d5db;
+}
+
+.archive-toggle.archived .toggle-track {
+    background: #d97706;
+}
+
+.archive-toggle.archived .toggle-thumb {
+    left: 18px;
+}
+
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-light);
+}

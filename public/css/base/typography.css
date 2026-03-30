@@ -1,0 +1,55 @@
+/* ============================================
+   Typography - New Design System
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-dark);
+}
+
+h1 { font-size: 3rem; }
+h2 { font-size: 2.25rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.25rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text-medium);
+}
+
+p:last-child { margin-bottom: 0; }
+
+small, .text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+
+strong, b, .font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--secondary) !important; }
+.text-muted { color: var(--text-light) !important; }
+.text-success { color: var(--success) !important; }
+.text-error { color: var(--error) !important; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+a {
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--warm-orange);
+}

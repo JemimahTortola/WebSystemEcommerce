@@ -1,0 +1,22 @@
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.status-dot.pending { background: #d97706; }
+.status-dot.processing { background: #2563eb; }
+.status-dot.shipped { background: #4f46e5; }
+.status-dot.delivered { background: #16a34a; }
+
+.item-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+}

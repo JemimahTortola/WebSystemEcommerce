@@ -1,0 +1,354 @@
+.settings-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.settings-tab:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.settings-tab.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings-section .content-card {
+    padding: 1.5rem;
+    max-width: 800px;
+}
+
+.settings-section h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.25rem;
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: white;
+    border: 2px solid var(--border-color);
+    padding: 0.5rem;
+}
+
+.hero-preview {
+    width: 300px;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.hero-image-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.hero-image-preview {
+    flex-shrink: 0;
+}
+
+.hero-image-preview img {
+    width: 280px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    background: white;
+}
+
+.hero-image-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.image-placeholder {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--light-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.hero-placeholder {
+    width: 280px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--light-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.file-input {
+    display: none;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 28px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    background: white;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--light-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.alert-success {
+    padding: 1rem;
+    background: #dcfce7;
+    color: #16a34a;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .settings-tabs {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-image-row {
+        flex-direction: column;
+    }
+    
+    .hero-image-preview img,
+    .hero-placeholder {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+.card-description {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.notification-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: var(--light-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.toggle-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.toggle-description {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 28px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.toggle-switch input:disabled + .toggle-slider {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .toggle-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .toggle-switch {
+        align-self: flex-end;
+    }
+}
