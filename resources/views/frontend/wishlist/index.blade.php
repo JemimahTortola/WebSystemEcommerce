@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'My Wishlist - Little Blessings')
+@section('title', 'My Wishlist - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/wishlist.css') }}">

@@ -15,7 +15,7 @@
     <form>
         <div class="form-group">
             <label>Store Name</label>
-            <input type="text" class="form-control" value="Lux Littles">
+            <input type="text" class="form-control" value="TinyThreads">
         </div>
         
         <div class="form-group">
@@ -30,7 +30,7 @@
         
         <div class="form-group">
             <label>Address</label>
-            <textarea class="form-control" rows="3">123 Baby Lane, City, State 12345</textarea>
+            <textarea class="form-control" rows="3">123 Kids Street, City, State 12345</textarea>
         </div>
         
         <h2 style="margin-top: 2rem;">Order Settings</h2>

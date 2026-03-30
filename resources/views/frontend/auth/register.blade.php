@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Register - Lux Littles')
+@section('title', 'Register - TinyThreads')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/register.css') }}">
@@ -11,7 +11,7 @@
     <div class="register-container">
         <div class="register-header">
             <h2>Create Account</h2>
-            <p>Join Lux Littles and start shopping.</p>
+            <p>Join TinyThreads and start shopping.</p>
         </div>
 
         @if($errors->any())

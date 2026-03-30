@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Little Blessings - Premium Baby Essentials')
+@section('title', 'TinyThreads - Newborn to Toddler Clothing')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/home.css') }}">
@@ -8,8 +8,8 @@
 
 @php
     $heroEdit = \App\Models\HeroEdit::first();
-    $heroTitle = $heroEdit->hero_title ?? 'Sweet Dreams Start Here';
-    $heroSubtitle = $heroEdit->hero_subtitle ?? 'Discover the softest, safest, and most adorable essentials for your precious little one';
+    $heroTitle = $heroEdit->hero_title ?? 'Adorable Styles for Little Ones';
+    $heroSubtitle = $heroEdit->hero_subtitle ?? 'Discover the softest, safest, and most adorable clothing for your precious newborn to toddler';
     $heroImage = '';
 @endphp
 
@@ -39,7 +39,7 @@
                 <div class="hero-image">
                     <div class="hero-image-wrapper">
                         @if($heroImage)
-                            <img src="{{ $heroImage }}" alt="Happy baby with soft toys" loading="eager">
+                            <img src="{{ $heroImage }}" alt="Happy child in cute clothes" loading="eager">
                         @else
                             <div class="placeholder-image" style="width: 100%; height: 400px; background: var(--light-gray); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem;">
                                 Hero Image
@@ -98,7 +98,7 @@
                             @endif
                         </a>
                         <div class="product-info">
-                            <span class="product-category">{{ $product->category->name ?? 'Baby Care' }}</span>
+                            <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
                             <h3 class="product-name">
                                 <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                             </h3>
@@ -159,7 +159,7 @@
                     Browse
                 </span>
                 <h2 id="categories-title" class="section-title">Shop by Category</h2>
-                <p class="section-description">Find everything your baby needs, organized with love</p>
+                <p class="section-description">Find everything your little one needs, organized with love</p>
             </header>
             <div class="categories-grid">
                 @foreach($categories as $category)
@@ -211,7 +211,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
                     </div>
                     <h3>Safe Materials</h3>
-                    <p>We use only the softest, safest materials for your baby's delicate skin</p>
+                    <p>We use only the softest, safest materials for your little one's delicate skin</p>
                 </article>
                 <article class="trust-item">
                     <div class="trust-icon pink">

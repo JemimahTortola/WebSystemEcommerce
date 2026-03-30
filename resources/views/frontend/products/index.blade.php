@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Shop - Little Blessings Baby Essentials')
+@section('title', 'Shop - TinyThreads Newborn to Toddler Clothing')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/shop.css') }}">
@@ -118,7 +118,7 @@
                                 </button>
                             @endauth
                             <div class="product-info">
-                                <span class="product-category">{{ $product->category->name ?? 'Baby Care' }}</span>
+                                <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
                                 <h3 class="product-name">
                                     <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
                                 </h3>

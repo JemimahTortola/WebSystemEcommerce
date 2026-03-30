@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Order Details - Little Blessings')
+@section('title', 'Order Details - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/orders.css') }}">

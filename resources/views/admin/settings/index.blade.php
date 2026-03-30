@@ -1,6 +1,6 @@
 @extends('admin.layout.main')
 
-@section('title', 'Admin Settings - Little Blessings')
+@section('title', 'Admin Settings - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin/adminsettings.css') }}">

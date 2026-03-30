@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Settings - Little Blessings')
+@section('title', 'Settings - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/settings.css') }}">

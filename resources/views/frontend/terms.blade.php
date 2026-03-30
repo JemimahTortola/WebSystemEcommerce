@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Terms of Service - Lux Littles')
+@section('title', 'Terms of Service - TinyThreads')
 
 @section('content')
 <section class="legal-page">
@@ -10,10 +10,10 @@
         
         <div class="legal-content">
             <h2>1. Acceptance of Terms</h2>
-            <p>By accessing and using the Lux Littles website, you accept and agree to be bound by these Terms of Service. If you do not agree, please do not use our services.</p>
+            <p>By accessing and using the TinyThreads website, you accept and agree to be bound by these Terms of Service. If you do not agree, please do not use our services.</p>
 
             <h2>2. Products and Services</h2>
-            <p>Lux Littles offers baby and toddler clothing and accessories for sale. All products are subject to availability. We reserve the right to limit quantities or discontinue products.</p>
+            <p>TinyThreads offers newborn to toddler clothing and accessories for sale. All products are subject to availability. We reserve the right to limit quantities or discontinue products.</p>
 
             <h2>3. Pricing</h2>
             <p>All prices are listed in USD and are subject to change without notice. We make every effort to ensure accurate pricing, but errors may occur. In case of pricing errors, we reserve the right to cancel orders.</p>
@@ -41,10 +41,10 @@
             </ul>
 
             <h2>8. Intellectual Property</h2>
-            <p>All content on this website, including logos, images, and text, is the property of Lux Littles and protected by copyright laws.</p>
+            <p>All content on this website, including logos, images, and text, is the property of TinyThreads and protected by copyright laws.</p>
 
             <h2>9. Limitation of Liability</h2>
-            <p>Lux Littles shall not be liable for any indirect, incidental, or consequential damages arising from the use of our website or products.</p>
+            <p>TinyThreads shall not be liable for any indirect, incidental, or consequential damages arising from the use of our website or products.</p>
 
             <h2>10. Governing Law</h2>
             <p>These terms shall be governed by the laws of the jurisdiction in which our business is registered.</p>

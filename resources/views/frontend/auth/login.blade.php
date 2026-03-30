@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Login - Lux Littles')
+@section('title', 'Login - TinyThreads')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/login.css') }}">
@@ -11,7 +11,7 @@
     <div class="auth-container">
         <div class="auth-header">
             <h2>Welcome Back</h2>
-            <p>Login to your Lux Littles account.</p>
+            <p>Login to your TinyThreads account.</p>
         </div>
 
         @if($errors->any())

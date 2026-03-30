@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Contact Us - Lux Littles')
+@section('title', 'Contact Us - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/contact.css') }}">
@@ -33,7 +33,7 @@ $storeInfo = \App\Models\StoreInfo::first();
                             </div>
                             <div>
                                 <h4>Email</h4>
-                                <p>{{ $storeInfo->store_email ?? 'hello@luxlittles.com' }}</p>
+                                <p>{{ $storeInfo->store_email ?? 'hello@tinythreads.com' }}</p>
                             </div>
                         </div>
                         

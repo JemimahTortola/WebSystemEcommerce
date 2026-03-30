@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Checkout - Little Blessings')
+@section('title', 'Checkout - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/checkout.css') }}">

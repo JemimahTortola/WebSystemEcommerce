@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Baby Essentials Store')</title>
+    <title>@yield('title', 'TinyThreads - Newborn to Toddler Clothing')</title>
     <link rel="stylesheet" href="{{ asset('css/base/variables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/base/typography.css') }}">
     <link rel="stylesheet" href="{{ asset('css/base/layout.css') }}">
@@ -33,8 +33,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 4 3 7.5 7 12 4-4.5 7-8 7-12a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="3"/></svg>
                 </div>
                 <div class="logo-text">
-                    <span>Little Blessings</span>
-                    <span>Baby Essentials</span>
+                    <span>TinyThreads</span>
+                    <span>Newborn to Toddler</span>
                 </div>
             </a>
             <ul class="nav-links">
@@ -117,9 +117,9 @@
                         <div class="footer-logo-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 4 3 7.5 7 12 4-4.5 7-8 7-12a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="3"/></svg>
                         </div>
-                        Little Blessings
+                        TinyThreads
                     </a>
-                    <p>Premium baby essentials crafted with love, care, and the softest materials for your precious little ones.</p>
+                    <p>Premium newborn to toddler clothing crafted with love, care, and the softest materials for your little ones.</p>
                     <div class="footer-social">
                         <a href="#" aria-label="Facebook">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -140,7 +140,7 @@
                     <ul>
                         <li><a href="{{ route('products.index') }}">All Products</a></li>
                         <li><a href="{{ route('products.index') }}?category=diapers">Diapers</a></li>
-                        <li><a href="{{ route('products.index') }}?category=clothes">Baby Clothes</a></li>
+                        <li><a href="{{ route('products.index') }}?category=clothes">Kids Clothes</a></li>
                         <li><a href="{{ route('products.index') }}?category=toys">Toys</a></li>
                         <li><a href="{{ route('products.index') }}?category=feeding">Feeding</a></li>
                     </ul>
@@ -160,7 +160,7 @@
                     <h4>Contact</h4>
                     <div class="contact-item">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                        {{ $storeInfo->store_email ?? 'hello@littleblessings.com' }}
+                        {{ $storeInfo->store_email ?? 'hello@tinythreads.com' }}
                     </div>
                     <div class="contact-item">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
@@ -175,7 +175,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} Little Blessings. All rights reserved. Made with love for your little ones.</p>
+                <p>&copy; {{ date('Y') }} TinyThreads. All rights reserved. Made with love for your little ones.</p>
                 <div class="footer-bottom-links">
                     <a href="{{ route('privacy') }}">Privacy</a>
                     <a href="{{ route('terms') }}">Terms</a>

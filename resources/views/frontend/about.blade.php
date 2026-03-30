@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'About Us - Little Blessings')
+@section('title', 'About Us - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/about.css') }}">
@@ -14,8 +14,8 @@ $storeInfo = \App\Models\StoreInfo::first();
 <main class="about-page">
     <section class="about-hero">
         <div class="container">
-            <h1>About {{ $storeInfo->store_name ?? 'Little Blessings' }}</h1>
-            <p>{{ $storeInfo->store_description ?? 'Premium baby essentials crafted with love, care, and the softest materials for your little one' }}</p>
+            <h1>About {{ $storeInfo->store_name ?? 'TinyThreads' }}</h1>
+            <p>{{ $storeInfo->store_description ?? 'Premium newborn to toddler clothing crafted with love, care, and the softest materials for your little one' }}</p>
         </div>
     </section>
 
@@ -27,7 +27,7 @@ $storeInfo = \App\Models\StoreInfo::first();
                     @if($storeInfo->store_description)
                         <p>{{ $storeInfo->store_description }}</p>
                     @else
-                        <p>Welcome to Little Blessings, where we believe every child deserves the very best. Founded with a passion for quality and a love for little ones, we specialize in creating comfortable, safe, and stylish essentials for babies and toddlers.</p>
+                        <p>Welcome to TinyThreads, where we believe every child deserves the very best. Founded with a passion for quality and a love for little ones, we specialize in creating comfortable, safe, and stylish clothing for newborns to toddlers.</p>
                         <p>Our collection features carefully selected materials that are gentle on delicate skin. From cozy sleepwear to everyday essentials, each piece is designed with your little one's comfort and safety in mind.</p>
                         <p>We understand that parents want nothing but the best for their children, which is why we rigorously test and carefully curate every product to ensure it meets our high standards.</p>
                     @endif
@@ -75,7 +75,7 @@ $storeInfo = \App\Models\StoreInfo::first();
 
             <div class="mission-section">
                 <h2>Our Mission</h2>
-                <p>To provide parents with trustworthy, high-quality baby essentials that combine safety, comfort, and style. We believe every little blessing deserves the very best start in life, and we're honored to be part of your journey.</p>
+                <p>To provide parents with trustworthy, high-quality children's clothing that combine safety, comfort, and style. We believe every little one deserves the very best start in life, and we're honored to be part of your journey.</p>
             </div>
 
             <div class="stats-section">
@@ -118,7 +118,7 @@ $storeInfo = \App\Models\StoreInfo::first();
                         <div class="team-avatar">E</div>
                         <h3>Emily Rodriguez</h3>
                         <div class="team-role">Customer Care</div>
-                        <p>Dedicated to providing exceptional service to our Little Blessings family.</p>
+                        <p>Dedicated to providing exceptional service to our TinyThreads family.</p>
                     </div>
                 </div>
             </div>

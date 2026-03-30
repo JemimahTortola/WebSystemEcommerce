@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', $product->name . ' - Little Blessings')
+@section('title', $product->name . ' - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/product-detail.css') }}">
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="product-info" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                    <span class="product-category">{{ $product->category->name ?? 'Baby Care' }}</span>
+                    <span class="product-category">{{ $product->category->name ?? 'Kids Clothing' }}</span>
                     <h1 id="product-title" class="product-title" itemprop="name">{{ $product->name }}</h1>
                     
                     @if($product->reviews_count > 0)

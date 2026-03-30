@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'My Profile - Little Blessings')
+@section('title', 'My Profile - TinyThreads')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/profile.css') }}">
