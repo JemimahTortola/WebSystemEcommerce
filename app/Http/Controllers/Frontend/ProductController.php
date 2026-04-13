@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Cache::remember('categories:all', 3600, function() {
+            return Category::all();
+        });
         
         $products = Product::where('is_active', true)
             ->with('category')
@@ -46,9 +49,11 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Product::where('slug', $slug)
-            ->with('category', 'approvedReviews.user')
-            ->firstOrFail();
+        $product = Cache::remember("product:{$slug}", 3600, function() use ($slug) {
+            return Product::where('slug', $slug)
+                ->with('category', 'approvedReviews.user')
+                ->firstOrFail();
+        });
         
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)

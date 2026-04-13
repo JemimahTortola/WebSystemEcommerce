@@ -3,6 +3,22 @@
    Modern & Elegant Authentication Design
    ============================================ */
 
+input[type="password"]::-webkit-caps-lock-indicator,
+input[type="password"]::-webkit-password-reveal-button {
+    -webkit-appearance: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    opacity: 0 !important;
+}
+
+input[type="password"]::-ms-reveal {
+    display: none !important;
+}
+
 .register-page {
     min-height: 100vh;
     display: flex;
@@ -102,19 +118,19 @@
     color: var(--warm-orange-dark);
 }
 
-.password-input-wrapper {
+.password-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.password-input-wrapper .form-control {
+.password-wrapper .form-control {
     padding-right: 48px;
 }
 
 .password-toggle {
     position: absolute;
-    right: 12px;
+    right: 14px;
     background: none;
     border: none;
     padding: 4px;
@@ -128,11 +144,6 @@
 
 .password-toggle:hover {
     color: var(--text-dark);
-}
-
-.password-toggle svg {
-    width: 20px;
-    height: 20px;
 }
 
 .text-danger {

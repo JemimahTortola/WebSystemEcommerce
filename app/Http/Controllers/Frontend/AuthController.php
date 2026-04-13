@@ -60,7 +60,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'login' => ['The provided credentials are incorrect.'],
+                'login' => ['The email or password you entered is incorrect.'],
             ]);
         }
 
@@ -184,5 +184,41 @@ class AuthController extends Controller
     public function wishlist()
     {
         return view('frontend.wishlist.index');
+    }
+
+    public function exportData(Request $request)
+    {
+        $user = $request->user();
+        
+        $data = [
+            'user' => $user->toArray(),
+            'orders' => $user->orders()->with('items')->get()->toArray(),
+            'cart_items' => $user->cart->items()->with('product')->get()->toArray() ?? [],
+            'reviews' => $user->reviews()->with('product')->get()->toArray(),
+            'created_at' => now()->toISOString(),
+        ];
+
+        return response()->json($data)
+            ->header('Content-Disposition', 'attachment; filename="my-data-' . date('Y-m-d') . '.json"')
+            ->header('Content-Type', 'application/json');
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->route('settings')->with('error', 'Incorrect password.');
+        }
+
+        $user->delete();
+
+        Auth::logout();
+
+        return redirect('/')->with('success', 'Your account has been deleted.');
     }
 }

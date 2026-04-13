@@ -11,12 +11,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Create admin user
-        DB::table('users')->insert([
+        // Create admin user in admins table
+        DB::table('admins')->insert([
             'name' => 'Admin',
             'email' => 'admin@tinythreads.com',
             'password' => Hash::make('password'),
-            'is_admin' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -26,7 +25,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => Hash::make('password'),
-            'is_admin' => false,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

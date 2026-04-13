@@ -17,12 +17,12 @@
         
         <div class="form-group">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ Auth::user()->name }}">
+            <input type="text" name="name" class="form-control" value="{{ Auth::guard('admin')->user()->name }}">
         </div>
         
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ Auth::user()->email }}">
+            <input type="email" name="email" class="form-control" value="{{ Auth::guard('admin')->user()->email }}">
         </div>
         
         <div class="form-group">

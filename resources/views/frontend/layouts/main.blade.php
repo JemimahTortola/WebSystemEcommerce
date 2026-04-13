@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TinyThreads - Premium newborn to toddler clothing">
     <title>@yield('title', 'TinyThreads - Newborn to Toddler Clothing')</title>
     <link rel="stylesheet" href="{{ asset('css/base/variables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/base/typography.css') }}">
@@ -21,16 +22,17 @@
     @stack('styles')
 </head>
 <body>
-    <div class="toast-container" id="toastContainer"></div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="toast-container" id="toastContainer" role="region" aria-live="polite" aria-label="Notifications"></div>
 
     @php
         $storeInfo = \App\Models\StoreInfo::first();
     @endphp
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="navbar-container">
-            <a href="{{ route('home') }}" class="logo">
+            <a href="{{ route('home') }}" class="logo" aria-label="TinyThreads Home">
                 <div class="logo-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 4 3 7.5 7 12 4-4.5 7-8 7-12a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 4 3 7.5 7 12 4-4.5 7-8 7-12a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="3"/></svg>
                 </div>
                 <div class="logo-text">
                     <span>TinyThreads</span>
@@ -107,7 +109,9 @@
         </div>
     </nav>
 
-    @yield('content')
+    <main id="main-content" role="main" tabindex="-1">
+        @yield('content')
+    </main>
 
     <footer class="footer">
         <div class="footer-container">
@@ -244,5 +248,82 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @stack('scripts')
+
+    <div id="cookieConsent" class="cookie-banner" style="display: none;">
+        <div class="cookie-content">
+            <p>We use cookies to enhance your browsing experience. By continuing to visit this site you agree to our use of cookies.</p>
+            <div class="cookie-buttons">
+                <button id="acceptCookies" class="btn btn-primary">Accept</button>
+                <a href="{{ route('privacy') }}" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 8px 16px;
+        z-index: 1001;
+        transition: top 0.3s;
+    }
+    .skip-link:focus {
+        top: 0;
+    }
+    .cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-top: 1px solid #e5e5e5;
+        padding: 1rem;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+    .cookie-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .cookie-content p {
+        margin: 0;
+        color: #333;
+        font-size: 0.9rem;
+    }
+    .cookie-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .cookie-banner .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cookieBanner = document.getElementById('cookieConsent');
+        const acceptBtn = document.getElementById('acceptCookies');
+        const consent = localStorage.getItem('cookie_consent');
+
+        if (!consent) {
+            cookieBanner.style.display = 'block';
+        }
+
+        acceptBtn.addEventListener('click', function() {
+            localStorage.setItem('cookie_consent', 'accepted');
+            localStorage.setItem('cookie_consent_date', new Date().toISOString());
+            cookieBanner.style.display = 'none';
+        });
+    });
+    </script>
 </body>
 </html>

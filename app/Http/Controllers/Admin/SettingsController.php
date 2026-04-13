@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\StoreInfo;
-use App\Models\HeroEdit;
 use App\Models\NotifInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,16 +13,14 @@ class SettingsController extends Controller
     public function index()
     {
         $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'TinyThreads']);
-        $heroEdit = HeroEdit::firstOrCreate(['id' => 1], []);
         $notifInfo = NotifInfo::firstOrCreate(['id' => 1], []);
 
-        return view('admin.settings.index', compact('storeInfo', 'heroEdit', 'notifInfo'));
+        return view('admin.settings.index', compact('storeInfo', 'notifInfo'));
     }
 
     public function update(Request $request)
     {
         $storeInfo = StoreInfo::firstOrCreate(['id' => 1], ['store_name' => 'TinyThreads']);
-        $heroEdit = HeroEdit::firstOrCreate(['id' => 1], []);
         $notifInfo = NotifInfo::firstOrCreate(['id' => 1], []);
 
         $request->validate([
@@ -33,9 +30,6 @@ class SettingsController extends Controller
             'store_address' => 'nullable|string',
             'store_description' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
-            'hero_title' => 'nullable|string|max:255',
-            'hero_subtitle' => 'nullable|string|max:255',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'notification_email' => 'nullable|email',
         ]);
 
@@ -55,20 +49,6 @@ class SettingsController extends Controller
             $storeInfo->logo = $logoName;
         }
         $storeInfo->save();
-
-        $heroEdit->hero_title = $request->hero_title;
-        $heroEdit->hero_subtitle = $request->hero_subtitle;
-
-        if ($request->hasFile('hero_image')) {
-            if ($heroEdit->hero_image) {
-                Storage::disk('public')->delete('hero/' . $heroEdit->hero_image);
-            }
-            $hero = $request->file('hero_image');
-            $heroName = 'hero_' . time() . '.' . $hero->getClientOriginalExtension();
-            $hero->storeAs('hero', $heroName, 'public');
-            $heroEdit->hero_image = $heroName;
-        }
-        $heroEdit->save();
 
         $notifInfo->notif_new_order = $request->boolean('notif_new_order');
         $notifInfo->notif_low_stock = $request->boolean('notif_low_stock');

@@ -1,12 +1,12 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Page Not Found - Lux Littles')
+@section('title', 'Page Not Found - TinyThreads')
 
 @section('content')
-<section class="error-page">
+<section class="error-page" role="region" aria-labelledby="error-heading">
     <div class="container">
         <div class="error-content">
-            <div class="error-icon">
+            <div class="error-icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a8c5d8" stroke-width="1.5">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
@@ -14,7 +14,7 @@
                     <line x1="15" y1="9" x2="15.01" y2="9"></line>
                 </svg>
             </div>
-            <h1>404</h1>
+            <h1 id="error-heading">404</h1>
             <h2>Oops! Page Not Found</h2>
             <p>Sorry, the page you're looking for doesn't exist or has been moved.</p>
             <div class="error-actions">

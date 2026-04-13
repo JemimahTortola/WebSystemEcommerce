@@ -117,8 +117,8 @@
                         </div>
                     </div>
                     <div class="header-profile" id="headerProfile">
-                        <div class="profile-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
-                        <span>{{ Auth::user()->name ?? 'Admin' }}</span>
+                        <div class="profile-avatar">{{ substr(Auth::guard('admin')->user()->name ?? 'A', 0, 1) }}</div>
+                        <span>{{ Auth::guard('admin')->user()->name ?? 'Admin' }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                 </div>

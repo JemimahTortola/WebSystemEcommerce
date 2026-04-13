@@ -25,10 +25,6 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         Store Information
     </button>
-    <button class="settings-tab" onclick="showSection('hero')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-        Homepage Hero
-    </button>
     <button class="settings-tab" onclick="showSection('notifications')">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         Notifications
@@ -84,45 +80,6 @@
                 <div class="form-group full-width">
                     <label class="form-label">Store Description</label>
                     <textarea name="store_description" class="form-control" rows="3" disabled>{{ old('store_description', $storeInfo->store_description) }}</textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Homepage Hero Section --}}
-    <div class="settings-section" id="section-hero" style="display: none;">
-        <div class="content-card">
-            <h2>Hero Content</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Hero Title</label>
-                    <input type="text" name="hero_title" class="form-control" value="{{ old('hero_title', $heroEdit->hero_title) }}" placeholder="e.g., Sweet Dreams Start Here" disabled>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Hero Subtitle</label>
-                    <input type="text" name="hero_subtitle" class="form-control" value="{{ old('hero_subtitle', $heroEdit->hero_subtitle) }}" placeholder="e.g., Discover the cutest and coziest outfits" disabled>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-card">
-            <h2>Hero Image</h2>
-            <div class="hero-image-row">
-                <div class="hero-image-preview">
-                    @if($heroEdit->hero_image)
-                        <img src="{{ asset('storage/hero/' . $heroEdit->hero_image) }}" alt="Hero Image" id="hero-preview-img">
-                    @else
-                        <div class="hero-placeholder" id="hero-placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            <span>No image</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="hero-image-actions">
-                    <label class="form-label">Upload New Image</label>
-                    <input type="file" name="hero_image" accept="image/*" class="file-input" id="hero-input" disabled>
-                    <label for="hero-input" class="btn btn-secondary" id="hero-btn">Choose File</label>
-                    <small class="form-hint">Recommended: 600x500px or larger</small>
                 </div>
             </div>
         </div>
@@ -223,7 +180,6 @@
 <script>
 function showSection(section) {
     document.getElementById('section-store').style.display = section === 'store' ? 'flex' : 'none';
-    document.getElementById('section-hero').style.display = section === 'hero' ? 'flex' : 'none';
     document.getElementById('section-notifications').style.display = section === 'notifications' ? 'flex' : 'none';
     
     document.querySelectorAll('.settings-tab').forEach(tab => tab.classList.remove('active'));
@@ -263,22 +219,6 @@ document.getElementById('logo-input').addEventListener('change', function(e) {
                 preview.src = e.target.result;
             } else if (placeholder) {
                 placeholder.outerHTML = '<img src="' + e.target.result + '" class="image-preview" id="logo-preview-img">';
-            }
-        };
-        reader.readAsDataURL(this.files[0]);
-    }
-});
-
-document.getElementById('hero-input').addEventListener('change', function(e) {
-    if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var preview = document.getElementById('hero-preview-img');
-            var placeholder = document.getElementById('hero-placeholder');
-            if (preview) {
-                preview.src = e.target.result;
-            } else if (placeholder) {
-                placeholder.outerHTML = '<img src="' + e.target.result + '" id="hero-preview-img">';
             }
         };
         reader.readAsDataURL(this.files[0]);

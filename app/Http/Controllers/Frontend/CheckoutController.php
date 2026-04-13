@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
@@ -47,37 +48,47 @@ class CheckoutController extends Controller
             }
         }
 
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'order_number' => 'ORD-' . strtoupper(Str::random(10)),
-            'total_amount' => $cart->total,
-            'status' => 'pending',
-            'payment_method' => $request->payment_method,
-            'payment_status' => 'pending',
-            'shipping_name' => strip_tags($request->shipping_name),
-            'shipping_phone' => strip_tags($request->shipping_phone),
-            'shipping_address' => strip_tags($request->shipping_address),
-            'notes' => strip_tags($request->notes),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        foreach ($cart->items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'product_name' => $item->product->name,
-                'price' => $item->price,
-                'quantity' => $item->quantity,
-                'subtotal' => $item->price * $item->quantity,
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                'total_amount' => $cart->total,
+                'status' => 'pending',
+                'payment_method' => $request->payment_method,
+                'payment_status' => 'pending',
+                'shipping_name' => strip_tags($request->shipping_name),
+                'shipping_phone' => strip_tags($request->shipping_phone),
+                'shipping_address' => strip_tags($request->shipping_address),
+                'notes' => strip_tags($request->notes),
             ]);
 
-            $product = Product::find($item->product_id);
-            $product->stock -= $item->quantity;
-            $product->save();
+            foreach ($cart->items as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'price' => $item->price,
+                    'quantity' => $item->quantity,
+                    'subtotal' => $item->price * $item->quantity,
+                ]);
+
+                $product = Product::find($item->product_id);
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+
+            $cart->items()->delete();
+
+            DB::commit();
+
+            return redirect('/orders')->with('success', 'Order placed successfully! Order number: ' . $order->order_number);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect('/cart')->with('error', 'Failed to process order. Please try again.');
         }
-
-        $cart->items()->delete();
-
-        return redirect('/orders')->with('success', 'Order placed successfully! Order number: ' . $order->order_number);
     }
 
     public function orders()

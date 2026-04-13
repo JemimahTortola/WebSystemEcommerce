@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,27 +23,25 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = \App\Models\User::where('email', $request->email)
-            ->where('is_admin', true)
-            ->first();
+        $admin = Admin::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['The email or password you entered is incorrect.'],
             ]);
         }
 
-        Auth::login($user);
+        Auth::guard('admin')->login($admin);
 
-        $isNewUser = $user->created_at->diffInMinutes(now()) < 1;
-        $message = $isNewUser ? 'Welcome to the Dashboard, ' . $user->name . '!' : 'Welcome back, ' . $user->name . '!';
+        $isNewAdmin = $admin->created_at->diffInMinutes(now()) < 1;
+        $message = $isNewAdmin ? 'Welcome to the Dashboard, ' . $admin->name . '!' : 'Welcome back, ' . $admin->name . '!';
         
         return redirect()->route('admin.dashboard')->with('success', $message);
     }
 
     public function logout()
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         return redirect('/admin/login');
     }
 

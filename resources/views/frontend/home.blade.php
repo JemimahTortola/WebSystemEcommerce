@@ -6,13 +6,6 @@
 <link rel="stylesheet" href="{{ asset('css/pages/home.css') }}">
 @endpush
 
-@php
-    $heroEdit = \App\Models\HeroEdit::first();
-    $heroTitle = $heroEdit->hero_title ?? 'Adorable Styles for Little Ones';
-    $heroSubtitle = $heroEdit->hero_subtitle ?? 'Discover the softest, safest, and most adorable clothing for your precious newborn to toddler';
-    $heroImage = '';
-@endphp
-
 @section('content')
 <main class="main-content">
     <!-- Hero Section -->
@@ -24,8 +17,8 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                         New Arrivals
                     </span>
-                    <h1 id="hero-title" class="hero-title">{{ $heroTitle }}</h1>
-                    <p class="hero-description">{{ $heroSubtitle }}</p>
+                    <h1 id="hero-title" class="hero-title">Adorable Styles for Little Ones</h1>
+                    <p class="hero-description">Discover the softest, safest, and most adorable clothing for your precious newborn to toddler</p>
                     <div class="hero-buttons">
                         <a href="{{ route('products.index') }}" class="btn-hero btn-hero-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -38,13 +31,9 @@
                 </div>
                 <div class="hero-image">
                     <div class="hero-image-wrapper">
-                        @if($heroImage)
-                            <img src="{{ $heroImage }}" alt="Happy child in cute clothes" loading="eager">
-                        @else
-                            <div class="placeholder-image" style="width: 100%; height: 400px; background: var(--light-gray); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem;">
-                                Hero Image
-                            </div>
-                        @endif
+                        <div class="placeholder-image" style="width: 100%; height: 400px; background: var(--light-gray); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem;">
+                            Hero Image
+                        </div>
                     </div>
                     <div class="hero-floating-card card-1">
                         <div class="floating-icon pink">

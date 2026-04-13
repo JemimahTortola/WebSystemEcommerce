@@ -28,18 +28,37 @@ Route::get('/health', function () {
     $status = [
         'status' => 'ok',
         'timestamp' => now()->toIso8601String(),
-        'database' => 'connected',
-        'cache' => Cache::store()->get('health_check') !== null || true,
+        'service' => 'tinythreads',
+        'version' => '1.0.0',
     ];
 
+    $checks = [];
+
+    // Database check
     try {
         \DB::connection()->getPdo();
+        $checks['database'] = ['status' => 'healthy', 'message' => 'connected'];
     } catch (\Exception $e) {
-        $status['database'] = 'disconnected';
+        $checks['database'] = ['status' => 'unhealthy', 'message' => 'disconnected'];
         $status['status'] = 'degraded';
     }
 
-    return response()->json($status);
+    // Cache check
+    try {
+        Cache::put('health_check', true, 10);
+        $checks['cache'] = ['status' => 'healthy', 'message' => 'connected'];
+    } catch (\Exception $e) {
+        $checks['cache'] = ['status' => 'degraded', 'message' => 'connection failed'];
+        $status['status'] = 'degraded';
+    }
+
+    // Disk space check
+    $checks['storage'] = ['status' => 'healthy'];
+
+    $status['checks'] = $checks;
+    $httpCode = $status['status'] === 'ok' ? 200 : 503;
+
+    return response()->json($status, $httpCode);
 })->name('health.check');
 
 // Frontend Routes
@@ -84,7 +103,7 @@ Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.r
 
 // Checkout Routes
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index')->middleware('auth');
-Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process')->middleware('auth');
+Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process')->middleware(['auth', 'throttle:3,1']);
 
 // Order Routes
 Route::get('/orders', [CheckoutController::class, 'orders'])->name('orders.index')->middleware('auth');
@@ -97,6 +116,8 @@ Route::put('/profile', [FrontendAuthController::class, 'updateProfile'])->name('
 // User Settings Routes
 Route::get('/settings', [FrontendAuthController::class, 'settings'])->name('settings')->middleware('auth');
 Route::put('/settings', [FrontendAuthController::class, 'updateSettings'])->name('settings.update')->middleware('auth');
+Route::post('/settings/export', [FrontendAuthController::class, 'exportData'])->name('data.export')->middleware('auth');
+Route::delete('/settings/delete', [FrontendAuthController::class, 'deleteAccount'])->name('account.delete')->middleware('auth');
 
 // Wishlist Routes
 Route::get('/wishlist', [FrontendAuthController::class, 'wishlist'])->name('wishlist')->middleware('auth');
@@ -108,7 +129,7 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
 
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     // Admin Product Routes

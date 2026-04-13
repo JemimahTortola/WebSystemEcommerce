@@ -14,8 +14,8 @@ class MessageController extends Controller
     public function index()
     {
         $conversations = Conversation::with(['user', 'lastMessage'])
-            ->where('admin_id', Auth::id())
-            ->orWhere('user_id', Auth::id())
+            ->where('admin_id', Auth::guard('admin')->id())
+            ->orWhere('user_id', Auth::guard('admin')->id())
             ->latest('last_message_at')
             ->get();
 
@@ -27,7 +27,7 @@ class MessageController extends Controller
         $conversation = Conversation::with(['user', 'admin', 'messages.sender'])->findOrFail($id);
         
         Message::where('conversation_id', $id)
-            ->where('sender_id', '!=', Auth::id())
+            ->where('sender_id', '!=', Auth::guard('admin')->id())
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
@@ -43,7 +43,7 @@ class MessageController extends Controller
         ]);
 
         $user = User::findOrFail($request->user_id);
-        $admin = Auth::user();
+        $admin = Auth::guard('admin')->user();
 
         $conversation = Conversation::create([
             'user_id' => $user->id,
@@ -73,7 +73,7 @@ class MessageController extends Controller
 
         Message::create([
             'conversation_id' => $id,
-            'sender_id' => Auth::id(),
+            'sender_id' => Auth::guard('admin')->id(),
             'content' => $request->content,
         ]);
 
