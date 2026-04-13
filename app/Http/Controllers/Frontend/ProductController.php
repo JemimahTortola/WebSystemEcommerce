@@ -63,4 +63,24 @@ class ProductController extends Controller
         
         return view('frontend.products.show', compact('product', 'relatedProducts'));
     }
+
+    public function suggestions(Request $request)
+    {
+        $search = $request->get('q', '');
+        
+        if (strlen($search) < 2) {
+            return response()->json([]);
+        }
+
+        $products = Product::where('is_active', true)
+            ->where(function($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            })
+            ->select('id', 'name', 'slug', 'price', 'image')
+            ->limit(8)
+            ->get();
+
+        return response()->json($products);
+    }
 }

@@ -45,6 +45,38 @@
     object-position: center center;
 }
 
+.wishlist-btn-detail {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    background: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s ease;
+    color: var(--warm-orange);
+}
+
+.wishlist-btn-detail:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.wishlist-btn-detail.active {
+    background: var(--warm-orange);
+    color: var(--white);
+}
+
+.wishlist-btn-detail.active svg {
+    fill: currentColor;
+}
+
 /* Product Info */
 .product-category {
     font-size: 0.75rem;

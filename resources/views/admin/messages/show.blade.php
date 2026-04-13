@@ -23,7 +23,7 @@
 <div class="messages-container">
     <div class="messages-list">
         @forelse($conversation->messages as $message)
-            <div class="message-item {{ $message->sender_id === Auth::guard('admin')->id() ? 'sent' : 'received' }}">
+            <div class="message-item {{ $message->sender_id === Auth::id() ? 'sent' : 'received' }}">
                 <div class="message-bubble">
                     <p>{{ $message->content }}</p>
                     <span class="message-time">{{ $message->created_at->format('M d, Y h:i A') }}</span>

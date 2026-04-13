@@ -31,12 +31,8 @@
     <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="navbar-container">
             <a href="{{ route('home') }}" class="logo" aria-label="TinyThreads Home">
-                <div class="logo-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 4 3 7.5 7 12 4-4.5 7-8 7-12a7 7 0 0 0-7-7z"/><circle cx="12" cy="10" r="3"/></svg>
-                </div>
                 <div class="logo-text">
                     <span>TinyThreads</span>
-                    <span>Newborn to Toddler</span>
                 </div>
             </a>
             <ul class="nav-links">
@@ -102,7 +98,7 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="btn-nav">Login</a>
+                    <a href="{{ route('login.form') }}" class="btn-nav">Login</a>
                     <a href="{{ route('register') }}" class="btn-nav btn-nav-primary">Register</a>
                 @endauth
             </div>

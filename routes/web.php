@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\ReviewController;
 use App\Http\Controllers\Frontend\SettingsController;
+use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
@@ -71,6 +72,7 @@ Route::get('/preview', function() { return view('frontend.preview'); })->name('p
 
 // Shop Routes
 Route::get('/shop', [ProductController::class, 'index'])->name('products.index');
+Route::get('/shop/search/suggestions', [ProductController::class, 'suggestions'])->name('products.suggestions');
 Route::get('/shop/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Auth Routes with Rate Limiting
@@ -78,8 +80,8 @@ Route::middleware('throttle:5,1')->group(function () {
     Route::post('/login', [FrontendAuthController::class, 'login'])->name('login');
     Route::post('/register', [FrontendAuthController::class, 'register']);
 });
-Route::get('/login', [FrontendAuthController::class, 'showLoginForm'])->name('login');
-Route::get('/register', [FrontendAuthController::class, 'showRegisterForm'])->name('register');
+Route::get('/login', [FrontendAuthController::class, 'showLoginForm'])->name('login.form');
+Route::get('/register', [FrontendAuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/logout', [FrontendAuthController::class, 'logout'])->name('logout');
 
 // Address Routes (protected)
@@ -120,7 +122,10 @@ Route::post('/settings/export', [FrontendAuthController::class, 'exportData'])->
 Route::delete('/settings/delete', [FrontendAuthController::class, 'deleteAccount'])->name('account.delete')->middleware('auth');
 
 // Wishlist Routes
-Route::get('/wishlist', [FrontendAuthController::class, 'wishlist'])->name('wishlist')->middleware('auth');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth');
+Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store')->middleware('auth');
+Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy'])->name('wishlist.destroy')->middleware('auth');
+Route::get('/wishlist/check/{productId}', [WishlistController::class, 'check'])->name('wishlist.check')->middleware('auth');
 
 // Review Routes
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
@@ -129,7 +134,7 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
 
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     // Admin Product Routes

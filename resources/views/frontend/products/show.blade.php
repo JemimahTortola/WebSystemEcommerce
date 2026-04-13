@@ -38,9 +38,14 @@
                                 <span>No Image Available</span>
                             </div>
                         @endif
-                        @if($product->created_at->gt(now()->subDays(7)))
+                        @if($product->created_at->gt(now()->subDays(1)))
                             <span class="product-badge badge-new">New Arrival</span>
                         @endif
+                        @auth
+                            <button class="wishlist-btn-detail" data-product-id="{{ $product->id }}" aria-label="Add to wishlist">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                        @endauth
                     </div>
                 </div>
 
@@ -110,7 +115,7 @@
                         @endif
                     @else
                         <div class="login-prompt">
-                            <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
+                            <a href="{{ route('login.form') }}" class="btn btn-primary btn-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                                 Login to Purchase
                             </a>
@@ -175,7 +180,7 @@
                     <div class="login-prompt card">
                         <p>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <a href="{{ route('login') }}">Login</a> to write a review
+                            <a href="{{ route('login.form') }}">Login</a> to write a review
                         </p>
                     </div>
                 @endauth
@@ -248,7 +253,7 @@
                                             <button class="btn-add-cart" disabled>Out of Stock</button>
                                         @endif
                                     @else
-                                        <a href="{{ route('login') }}" class="btn-add-cart">Add to Cart</a>
+                                        <a href="{{ route('login.form') }}" class="btn-add-cart">Add to Cart</a>
                                     @endauth
                                 </div>
                             </article>
@@ -316,6 +321,52 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    // Wishlist button on product detail page
+    $('.wishlist-btn-detail').click(function() {
+        var button = $(this);
+        var productId = button.data('product-id');
+        
+        $.ajax({
+            url: '/wishlist',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_id: productId
+            },
+            success: function(response) {
+                button.toggleClass('active');
+                if (button.hasClass('active')) {
+                    button.find('svg').attr('fill', 'currentColor');
+                    if (typeof showToast === 'function') {
+                        showToast('success', 'Wishlist', 'Added to your wishlist');
+                    }
+                } else {
+                    button.find('svg').attr('fill', 'none');
+                    if (typeof showToast === 'function') {
+                        showToast('success', 'Wishlist', 'Removed from your wishlist');
+                    }
+                }
+            },
+            error: function(xhr) {
+                if(xhr.status === 401) {
+                    window.location.href = '{{ route("login") }}';
+                }
+            }
+        });
+    });
+
+    // Check if product is in wishlist on page load
+    $.ajax({
+        url: '/wishlist/check/{{ $product->id }}',
+        method: 'GET',
+        success: function(response) {
+            if(response.exists) {
+                $('.wishlist-btn-detail').addClass('active');
+                $('.wishlist-btn-detail svg').attr('fill', 'currentColor');
+            }
+        }
     });
 });
 </script>

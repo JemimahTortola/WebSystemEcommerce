@@ -87,7 +87,7 @@
             <button type="submit" class="btn btn-primary btn-block">Create Account</button>
 
             <div class="register-footer">
-                <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
+                <p>Already have an account? <a href="{{ route('login.form') }}">Login here</a></p>
             </div>
         </form>
     </div>

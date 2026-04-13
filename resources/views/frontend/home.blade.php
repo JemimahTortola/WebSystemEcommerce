@@ -72,7 +72,7 @@
             <div class="products-grid">
                 @foreach($featuredProducts as $product)
                     <article class="product-card">
-                        @if($product->created_at->gt(now()->subDays(7)))
+                        @if($product->created_at->gt(now()->subDays(1)))
                             <span class="product-badge badge-new">New</span>
                         @elseif($product->stock < 5)
                             <span class="product-badge badge-sale">Low Stock</span>
@@ -107,7 +107,7 @@
                                     </button>
                                 @endif
                             @else
-                                <a href="{{ route('login') }}" class="btn-add-cart">
+                                <a href="{{ route('login.form') }}" class="btn-add-cart">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                                     Add to Cart
                                 </a>

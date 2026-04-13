@@ -92,12 +92,13 @@
                     </p>
 
                     <div class="shop-controls">
-                        <form action="{{ route('products.index') }}" method="GET" class="search-input-wrapper">
+                        <form action="{{ route('products.index') }}" method="GET" class="search-input-wrapper" id="searchForm">
                             @if(request('category'))
                                 <input type="hidden" name="category" value="{{ request('category') }}">
                             @endif
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                            <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" onchange="this.form.submit()">
+                            <input type="text" name="search" id="searchInput" placeholder="Search products..." value="{{ request('search') }}" autocomplete="off">
+                            <div class="search-suggestions" id="searchSuggestions"></div>
                         </form>
 
                         <form>
@@ -123,7 +124,7 @@
                     <div class="products-grid" role="list">
                         @foreach($products as $product)
                             <article class="product-card" role="listitem">
-                                @if($product->created_at->gt(now()->subDays(7)))
+                                @if($product->created_at->gt(now()->subDays(1)))
                                     <span class="product-badge badge-new">New</span>
                                 @elseif($product->sale_price)
                                     <span class="product-badge badge-sale">Sale</span>
@@ -141,7 +142,7 @@
                                     @endif
                                 </a>
                                 @auth
-                                    <button class="product-wishlist" aria-label="Add to wishlist">
+                                    <button class="product-wishlist" data-product-id="{{ $product->id }}" aria-label="Add to wishlist">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                                     </button>
                                 @endauth
@@ -169,7 +170,7 @@
                                             </button>
                                         @endif
                                     @else
-                                        <a href="{{ route('login') }}" class="btn-add-cart">
+                                        <a href="{{ route('login.form') }}" class="btn-add-cart">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                                             Add to Cart
                                         </a>
@@ -260,9 +261,91 @@ $(document).ready(function() {
         });
     });
 
+    // Search suggestions
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsBox = document.getElementById('searchSuggestions');
+    let searchTimeout;
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            clearTimeout(searchTimeout);
+            
+            if (query.length < 2) {
+                suggestionsBox.innerHTML = '';
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                fetch(`/shop/search/suggestions?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            suggestionsBox.innerHTML = '<div class="suggestion-no-results">No products found</div>';
+                            suggestionsBox.style.display = 'block';
+                            return;
+                        }
+                        
+                        suggestionsBox.innerHTML = data.map(product => `
+                            <a href="/shop/${product.slug}" class="suggestion-item">
+                                <div class="suggestion-image">
+                                    ${product.image 
+                                        ? `<img src="/storage/products/${product.image}" alt="${product.name}">` 
+                                        : '<div class="suggestion-placeholder">No Image</div>'
+                                    }
+                                </div>
+                                <div class="suggestion-info">
+                                    <span class="suggestion-name">${product.name}</span>
+                                    <span class="suggestion-price">$${parseFloat(product.price).toFixed(2)}</span>
+                                </div>
+                            </a>
+                        `).join('');
+                        suggestionsBox.style.display = 'block';
+                    });
+            }, 300);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('focus', function() {
+            if (this.value.trim().length >= 2 && suggestionsBox.children.length > 0) {
+                suggestionsBox.style.display = 'block';
+            }
+        });
+    }
+
     $('.product-wishlist').click(function(e) {
         e.preventDefault();
-        $(this).toggleClass('active');
+        const button = $(this);
+        const productId = button.data('product-id');
+        
+        $.ajax({
+            url: '/wishlist',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                product_id: productId
+            },
+            success: function(response) {
+                button.toggleClass('active');
+                if (button.hasClass('active')) {
+                    showToast('success', 'Wishlist', 'Added to your wishlist');
+                } else {
+                    showToast('success', 'Wishlist', 'Removed from your wishlist');
+                }
+            },
+            error: function(xhr) {
+                if(xhr.status === 401) {
+                    window.location.href = '{{ route("login") }}';
+                }
+            }
+        });
     });
 });
 </script>
