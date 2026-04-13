@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
 @endpush
 
 @section('content')
@@ -114,7 +114,7 @@
                             $height = ($monthlyRevenue['data'][$index] / $maxRevenue) * 100;
                         @endphp
                         <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: {{ max($height, 5) }}%;" title="${{ number_format($monthlyRevenue['data'][$index], 2) }}"></div>
+                            <div class="chart-bar" style="height: {{ max($height, 5) }}@percnt;" title="${{ number_format($monthlyRevenue['data'][$index], 2) }}"></div>
                             <span class="chart-label">{{ $label }}</span>
                         </div>
                     @endforeach

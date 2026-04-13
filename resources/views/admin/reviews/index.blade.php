@@ -3,7 +3,7 @@
 @section('title', 'Reviews - Admin')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/reviews.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/reviews.css') }}">
 @endpush
 
 @section('content')
@@ -50,7 +50,7 @@
 </div>
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/reviews.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/reviews.css') }}">
 @endpush
 
 @section('modals')

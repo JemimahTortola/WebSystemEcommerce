@@ -3,7 +3,7 @@
 @section('title', 'Edit Product - Admin')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/products-form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/products-form.css') }}">
 @endpush
 
 @section('content')

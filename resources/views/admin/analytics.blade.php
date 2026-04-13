@@ -3,7 +3,7 @@
 @section('title', 'Analytics - Admin')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/analytics.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/analytics.css') }}">
 @endpush
 
 @section('content')
@@ -122,7 +122,7 @@
 </div>
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/analytics.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/analytics.css') }}">
 @endpush
 
 @endsection

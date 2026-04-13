@@ -9,8 +9,9 @@
     background: var(--white);
     border-radius: 12px;
     padding: 1.25rem;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
     transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--border-light);
 }
 
 .stat-card:hover {
@@ -100,7 +101,7 @@
 
 .stat-footer {
     padding-top: 0.75rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-light);
 }
 
 .stat-period {
@@ -130,8 +131,9 @@
 .dashboard-card {
     background: var(--white);
     border-radius: 12px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
+    border: 1px solid var(--border-light);
 }
 
 .card-header {
@@ -139,7 +141,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .card-header h3 {
@@ -154,19 +156,19 @@
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 20px;
-    background: var(--light-bg);
+    background: var(--cream);
     color: var(--text-light);
 }
 
 .view-all {
     font-size: 0.8rem;
-    color: var(--primary-color);
+    color: var(--warm-orange);
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .view-all:hover {
-    color: var(--primary-dark);
+    color: var(--warm-orange-dark);
     text-decoration: underline;
 }
 
@@ -274,7 +276,7 @@
 
 .status-item {
     padding: 1rem;
-    background: var(--light-bg);
+    background: var(--cream);
     border-radius: 10px;
 }
 
@@ -311,7 +313,7 @@
 
 .status-bar {
     height: 6px;
-    background: var(--border-color);
+    background: var(--border-light);
     border-radius: 3px;
     overflow: hidden;
 }
@@ -331,7 +333,8 @@
     background: var(--white);
     border-radius: 12px;
     padding: 1.25rem;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
 }
 
 .quick-actions-card h3 {
@@ -353,14 +356,14 @@
     align-items: center;
     gap: 8px;
     padding: 1rem;
-    background: var(--light-bg);
+    background: var(--cream);
     border-radius: 10px;
     text-decoration: none;
     transition: all 0.2s;
 }
 
 .quick-action:hover {
-    background: var(--border-color);
+    background: var(--light-gray);
     transform: translateY(-2px);
 }
 
@@ -402,7 +405,7 @@
 }
 
 .alert-item:hover {
-    background: var(--light-bg);
+    background: var(--cream);
 }
 
 .alert-thumb {
@@ -442,7 +445,7 @@
     justify-content: center;
     gap: 1rem;
     padding: 0.75rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-light);
 }
 
 .alert-count {
@@ -493,7 +496,7 @@
 }
 
 .notification-item:hover {
-    background: var(--light-bg);
+    background: var(--cream);
 }
 
 .notif-icon {
@@ -519,7 +522,7 @@
 
 .notif-action {
     font-size: 0.7rem;
-    color: var(--primary-color);
+    color: var(--warm-orange);
     margin-top: 2px;
 }
 
@@ -560,13 +563,13 @@
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    background: var(--light-bg);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--cream);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .admin-table td {
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .admin-table tbody tr {
@@ -574,7 +577,7 @@
 }
 
 .admin-table tbody tr:hover {
-    background: var(--light-bg);
+    background: var(--cream);
 }
 
 .admin-table tbody tr:last-child td {
@@ -596,7 +599,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--warm-orange), var(--terracotta));
     color: white;
     display: flex;
     align-items: center;
@@ -668,7 +671,7 @@
 }
 
 .top-product-item:hover {
-    background: var(--light-bg);
+    background: var(--cream);
 }
 
 .product-thumb {
@@ -733,7 +736,7 @@
 }
 
 .activity-item:hover {
-    background: var(--light-bg);
+    background: var(--cream);
 }
 
 .activity-icon {
@@ -792,6 +795,26 @@
 .dashboard-date {
     font-size: 0.85rem;
     color: var(--text-light);
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.content-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 0.25rem 0;
+}
+
+.content-header p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0;
 }
 
 @media (max-width: 1280px) {
