@@ -6,10 +6,6 @@
 <link rel="stylesheet" href="{{ asset('css/pages/contact.css') }}">
 @endpush
 
-@php
-$storeInfo = \App\Models\StoreInfo::first();
-@endphp
-
 @section('content')
 <main class="contact-page">
     <section class="contact-hero">
@@ -33,7 +29,7 @@ $storeInfo = \App\Models\StoreInfo::first();
                             </div>
                             <div>
                                 <h4>Email</h4>
-                                <p>{{ $storeInfo->store_email ?? 'hello@tinythreads.com' }}</p>
+                                <p>hello@tinythreads.com</p>
                             </div>
                         </div>
                         
@@ -43,21 +39,9 @@ $storeInfo = \App\Models\StoreInfo::first();
                             </div>
                             <div>
                                 <h4>Phone</h4>
-                                <p>{{ $storeInfo->store_phone ?? '(555) 123-4567' }}</p>
+                                <p>(555) 123-4567</p>
                             </div>
                         </div>
-                        
-                        @if($storeInfo->store_address)
-                        <div class="contact-detail-card">
-                            <div class="contact-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            </div>
-                            <div>
-                                <h4>Address</h4>
-                                <p>{{ $storeInfo->store_address }}</p>
-                            </div>
-                        </div>
-                        @endif
                         
                         <div class="contact-detail-card">
                             <div class="contact-icon">

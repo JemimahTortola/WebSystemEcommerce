@@ -6,16 +6,12 @@
 <link rel="stylesheet" href="{{ asset('css/pages/about.css') }}">
 @endpush
 
-@php
-$storeInfo = \App\Models\StoreInfo::first();
-@endphp
-
 @section('content')
 <main class="about-page">
     <section class="about-hero">
         <div class="container">
-            <h1>About {{ $storeInfo->store_name ?? 'TinyThreads' }}</h1>
-            <p>{{ $storeInfo->store_description ?? 'Premium newborn to toddler clothing crafted with love, care, and the softest materials for your little one' }}</p>
+            <h1>About TinyThreads</h1>
+            <p>Premium newborn to toddler clothing crafted with love, care, and the softest materials for your little one</p>
         </div>
     </section>
 
@@ -24,13 +20,9 @@ $storeInfo = \App\Models\StoreInfo::first();
             <div class="about-grid">
                 <div class="about-text">
                     <h2>Our Story</h2>
-                    @if($storeInfo->store_description)
-                        <p>{{ $storeInfo->store_description }}</p>
-                    @else
-                        <p>Welcome to TinyThreads, where we believe every child deserves the very best. Founded with a passion for quality and a love for little ones, we specialize in creating comfortable, safe, and stylish clothing for newborns to toddlers.</p>
-                        <p>Our collection features carefully selected materials that are gentle on delicate skin. From cozy sleepwear to everyday clothing, each piece is designed with your little one's comfort and safety in mind.</p>
-                        <p>We understand that parents want nothing but the best for their children, which is why we rigorously test and carefully curate every product to ensure it meets our high standards.</p>
-                    @endif
+                    <p>Welcome to TinyThreads, where we believe every child deserves the very best. Founded with a passion for quality and a love for little ones, we specialize in creating comfortable, safe, and stylish clothing for newborns to toddlers.</p>
+                    <p>Our collection features carefully selected materials that are gentle on delicate skin. From cozy sleepwear to everyday clothing, each piece is designed with your little one's comfort and safety in mind.</p>
+                    <p>We understand that parents want nothing but the best for their children, which is why we rigorously test and carefully curate every product to ensure it meets our high standards.</p>
                 </div>
                 <div class="about-image">
                     <div class="placeholder-image" style="width: 100%; height: 350px; background: var(--light-gray); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem; border-radius: var(--radius-md);">

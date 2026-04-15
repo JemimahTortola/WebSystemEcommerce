@@ -50,7 +50,7 @@
         </form>
 
         <div class="auth-footer">
-            <p>Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
+            <p>Don't have an account? <a href="{{ route('register.form') }}">Register here</a></p>
         </div>
     </div>
 </main>

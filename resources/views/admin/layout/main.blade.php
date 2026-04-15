@@ -10,19 +10,12 @@
 <body>
     <div class="toast-container" id="toastContainer"></div>
 
-    @php
-        $storeInfo = \App\Models\StoreInfo::first();
-    @endphp
     <div class="admin-layout" id="adminLayout">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    @if($storeInfo && $storeInfo->logo)
-                        <img src="{{ asset('storage/logos/' . $storeInfo->logo) }}" alt="{{ $storeInfo->store_name ?? 'Store' }}" class="sidebar-logo-img">
-                    @else
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#a8c5d8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    @endif
-                    <span class="logo-text">{{ $storeInfo->store_name ?? 'Lux Littles' }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#a8c5d8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <span class="logo-text">TinyThreads</span>
                 </div>
             </div>
             <ul class="sidebar-menu">
