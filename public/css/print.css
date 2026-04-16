@@ -1,0 +1,228 @@
+/*
+ * Print Stylesheet for TinyThreads E-Commerce
+ * Optimized for printing receipts, invoices, and order confirmations
+ */
+
+@media print {
+    /* Reset and hide non-essential elements */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Hide navigation, footer, and interactive elements */
+    .navbar,
+    .nav-links,
+    .nav-actions,
+    .footer,
+    .sidebar,
+    .btn,
+    .btn-add-cart,
+    .wishlist-btn,
+    .product-wishlist,
+    .quantity-selector,
+    .cart-item-remove,
+    .checkout-steps,
+    .checkout-form-section,
+    .newsletter-section,
+    .toast-container,
+    .cookie-banner,
+    .skip-link,
+    .user-dropdown,
+    .cart-icon,
+    .hero-section,
+    .featured-section,
+    .categories-section,
+    .trust-section,
+    .testimonials-section,
+    .breadcrumb,
+    .filters-section,
+    .pagination,
+    .related-products,
+    .product-reviews,
+    .form-section,
+    video,
+    audio,
+    iframe {
+        display: none !important;
+    }
+
+    /* Reset body */
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 12pt;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Show main content full width */
+    .main-content,
+    .container,
+    .checkout-container,
+    .cart-container,
+    .orders-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Product grid to single column for print */
+    .products-grid,
+    .cart-items,
+    .order-items {
+        display: block !important;
+    }
+
+    .product-card,
+    .cart-item,
+    .order-item {
+        page-break-inside: avoid;
+        border-bottom: 1px solid #ddd;
+        padding: 10pt 0;
+        margin-bottom: 10pt;
+    }
+
+    /* Images */
+    img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    /* Typography */
+    h1 {
+        font-size: 18pt;
+        margin-bottom: 10pt;
+    }
+
+    h2 {
+        font-size: 14pt;
+        margin-bottom: 8pt;
+    }
+
+    h3 {
+        font-size: 12pt;
+        margin-bottom: 6pt;
+    }
+
+    /* Links - show URLs */
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #666;
+    }
+
+    a[href^="#"]:after,
+    a[href^="javascript"]:after {
+        content: "";
+    }
+
+    /* Remove background colors */
+    .hero-section,
+    .featured-section,
+    .categories-section,
+    .trust-section,
+    .testimonials-section,
+    .newsletter-section,
+    .product-card,
+    .cart-summary,
+    .checkout-summary,
+    .summary-card {
+        background: #fff !important;
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 6pt;
+        text-align: left;
+    }
+
+    th {
+        background: #f5f5f5 !important;
+        font-weight: bold;
+    }
+
+    /* Order confirmation specific */
+    .order-confirmation {
+        border: 2px solid #000;
+        padding: 20pt;
+    }
+
+    .order-header {
+        border-bottom: 1px solid #000;
+        padding-bottom: 10pt;
+        margin-bottom: 10pt;
+    }
+
+    .order-details {
+        margin-bottom: 20pt;
+    }
+
+    .order-total {
+        font-size: 14pt;
+        font-weight: bold;
+        text-align: right;
+        margin-top: 10pt;
+        padding-top: 10pt;
+        border-top: 2px solid #000;
+    }
+
+    /* Address blocks */
+    .address-block {
+        margin-bottom: 15pt;
+    }
+
+    /* Footer for printed pages */
+    .print-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 9pt;
+        color: #666;
+        border-top: 1px solid #ddd;
+        padding-top: 10pt;
+    }
+
+    /* Page breaks */
+    .page-break {
+        page-break-before: always;
+    }
+
+    .no-break {
+        page-break-inside: avoid;
+    }
+
+    /* Hide empty sections */
+    .empty-section:empty {
+        display: none !important;
+    }
+}
+
+/* Print header styles */
+@page {
+    margin: 1cm;
+    size: A4;
+}
+
+@page :first {
+    margin-top: 0;
+}
+
+/* Print margins for order/invoice pages */
+.print-page {
+    @page {
+        margin: 2cm;
+    }
+}

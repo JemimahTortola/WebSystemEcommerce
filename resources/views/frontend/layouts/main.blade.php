@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/print.css') }}" media="print">
     @stack('styles')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +25,8 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="toast-container" id="toastContainer" role="region" aria-live="polite" aria-label="Notifications"></div>
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#main-nav" class="skip-link">Skip to navigation</a>
+    <nav class="navbar" id="main-nav" role="navigation" aria-label="Main navigation">
         <div class="navbar-container">
             <a href="{{ route('home') }}" class="logo" aria-label="TinyThreads Home">
                 <div class="logo-text">
@@ -50,7 +52,7 @@
                     <div class="user-dropdown">
                         <button class="user-dropdown-toggle">
                             @if(auth()->user()->profile_image)
-                                <img src="{{ asset('storage/profile_images/' . auth()->user()->profile_image) }}" alt="Profile" class="user-avatar">
+                                <img src="{{ asset('storage/profile_images/' . auth()->user()->profile_image) }}" alt="Profile" class="user-avatar" loading="lazy">
                             @else
                                 <div class="user-avatar-placeholder">
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}

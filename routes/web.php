@@ -62,13 +62,14 @@ Route::get('/health', function () {
     return response()->json($status, $httpCode);
 })->name('health.check');
 
-// Frontend Routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Frontend Routes (with caching for performance)
+Route::get('/', [HomeController::class, 'index'])->name('home')
+    ->middleware('csp');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/privacy', function() { return view('frontend.privacy'); })->name('privacy');
 Route::get('/terms', function() { return view('frontend.terms'); })->name('terms');
-Route::get('/preview', function() { return view('frontend.preview'); })->name('preview');
+
 
 // Shop Routes
 Route::get('/shop', [ProductController::class, 'index'])->name('products.index');
@@ -119,7 +120,7 @@ Route::put('/profile', [FrontendAuthController::class, 'updateProfile'])->name('
 Route::get('/settings', [FrontendAuthController::class, 'settings'])->name('settings')->middleware('auth');
 Route::put('/settings', [FrontendAuthController::class, 'updateSettings'])->name('settings.update')->middleware('auth');
 Route::post('/settings/export', [FrontendAuthController::class, 'exportData'])->name('data.export')->middleware('auth');
-Route::delete('/settings/delete', [FrontendAuthController::class, 'deleteAccount'])->name('account.delete')->middleware('auth');
+Route::delete('/settings/delete', [FrontendAuthController::class, 'deleteAccount'])->name('account.delete')->middleware(['auth', 'password.confirm']);
 
 // Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth');

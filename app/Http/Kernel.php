@@ -68,5 +68,7 @@ class Kernel extends HttpKernel
 
     protected $middlewareAliases = [
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'https' => \App\Http\Middleware\ForceHttps::class,
+        'csp' => \App\Http\Middleware\ContentSecurityPolicy::class,
     ];
 }

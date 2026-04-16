@@ -14,12 +14,15 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->decimal('total_amount', 10, 2);
             $table->string('status')->default('pending');
-            $table->string('payment_method')->nullable();
             $table->string('payment_status')->default('pending');
             $table->text('shipping_address')->nullable();
             $table->string('shipping_name')->nullable();
             $table->string('shipping_phone')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('is_archived')->default(false);
+            $table->string('tracking_number')->nullable();
+            $table->string('courier')->nullable();
+            $table->string('estimated_delivery')->nullable();
             $table->timestamps();
         });
     }

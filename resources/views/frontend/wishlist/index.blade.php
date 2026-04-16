@@ -26,9 +26,9 @@
             <div class="wishlist-card" data-product-id="{{ $item->product_id }}">
                 <a href="{{ route('products.show', $item->product->slug) }}" class="wishlist-image">
                     @if($item->product->primaryImage)
-                        <img src="{{ asset('storage/products/' . $item->product->primaryImage->image) }}" alt="{{ $item->product->name }}">
+                        <img src="{{ asset('storage/products/' . $item->product->primaryImage->image) }}" alt="{{ $item->product->name }}" loading="lazy">
                     @else
-                        <img src="{{ asset('images/placeholder.jpg') }}" alt="{{ $item->product->name }}">
+                        <img src="{{ asset('images/placeholder.jpg') }}" alt="{{ $item->product->name }}" loading="lazy">
                     @endif
                 </a>
                 <div class="wishlist-details">
