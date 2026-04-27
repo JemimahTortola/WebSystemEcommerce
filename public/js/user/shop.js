@@ -1,0 +1,1 @@
+<!-- Shop page uses database products -->

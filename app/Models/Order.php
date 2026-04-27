@@ -9,7 +9,14 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'order_number', 'total_amount', 'status', 'payment_status', 'shipping_name', 'shipping_phone', 'shipping_address', 'delivery_date', 'delivery_time', 'delivery_notes', 'gift_message', 'coupon_id', 'delivery_area_id', 'tracking_number', 'courier'];
+    protected $fillable = [
+        'user_id', 'order_number', 'total_amount', 'status', 'payment_status',
+        'payment_receipt', 'payment_method',
+        'shipping_name', 'shipping_phone', 'shipping_address',
+        'city', 'postal_code',
+        'delivery_date', 'delivery_time', 'delivery_notes', 'gift_message',
+        'tracking_number', 'courier',
+    ];
 
     protected $casts = ['total_amount' => 'decimal:2', 'delivery_date' => 'date'];
 
@@ -23,14 +30,14 @@ class Order extends Model
         return $this->belongsTo(Coupon::class);
     }
 
+public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function deliveryArea()
     {
         return $this->belongsTo(DeliveryArea::class);
-    }
-
-    public function items()
-    {
-        return $this->hasMany(OrderItem::class);
     }
 
     public function payment()

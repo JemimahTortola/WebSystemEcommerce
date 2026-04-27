@@ -1,0 +1,35 @@
+@import url('header.css');
+@import url('app.css');
+@import url('forms.css');
+@import url('buttons.css');
+@import url('links.css');
+@import url('alerts.css');
+@import url('footer.css');
+@import url('loading.css');
+
+@import url('user/base.css');
+@import url('user/profile.css');
+@import url('user/wishlist.css');
+@import url('user/addresses.css');
+
+@import url('user/shop.css');
+@import url('user/product.css');
+@import url('user/cart.css');
+@import url('user/checkout.css');
+@import url('user/orders.css');
+@import url('user/order-detail.css');
+@import url('user/track-order.css');
+@import url('user/delivery-areas.css');
+@import url('user/home.css');
+@import url('user/page.css');
+@import url('user/contact.css');
+@import url('user/login.css');
+@import url('user/register.css');
+@import url('user/notifications.css');
+
+@import url('admin/base.css');
+@import url('admin/dashboard.css');
+@import url('admin/orders.css');
+@import url('admin/reviews.css');
+@import url('admin/users.css');
+@import url('admin/coupons.css');

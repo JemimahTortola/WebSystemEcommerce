@@ -18,11 +18,14 @@ class CreateOrdersTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_number')->unique();
             $table->decimal('total_amount', 10, 2);
-            $table->string('status', 50);
-            $table->string('payment_status', 50);
+            $table->string('status', 50)->default('pending');
+            $table->string('payment_method', 50)->nullable();
+            $table->string('payment_status', 50)->default('pending');
             $table->string('shipping_name');
             $table->string('shipping_phone', 50);
             $table->text('shipping_address');
+            $table->string('city')->nullable();
+            $table->string('postal_code', 20)->nullable();
             $table->date('delivery_date');
             $table->string('delivery_time', 50);
             $table->text('delivery_notes')->nullable();
