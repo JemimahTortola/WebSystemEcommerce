@@ -1,0 +1,138 @@
+/* User Notification Styles - Separate from Admin */
+
+/* Notification Wrapper */
+.user-notification-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Notification Button/Bell */
+.user-notification-btn {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text-dark);
+    transition: color 0.3s;
+}
+
+.user-notification-btn:hover {
+    color: var(--primary);
+}
+
+/* Notification Badge */
+.user-notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Notification Dropdown */
+.user-notification-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    margin-top: 0.5rem;
+}
+
+.user-notification-dropdown.active {
+    display: block;
+}
+
+/* Notification Header */
+.user-notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.user-notif-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.user-notif-header button {
+    background: none;
+    border: none;
+    color: #e8a5aa;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+/* Notification List */
+.user-notif-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+/* Notification Item */
+.user-notif-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.user-notif-item:hover {
+    background: #f9fafb;
+}
+
+.user-notif-item.unread {
+    background: #f0f9ff;
+}
+
+.user-notif-item .notif-icon {
+    font-size: 1.25rem;
+    margin-right: 0.75rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.user-notif-item .notif-content {
+    flex: 1;
+}
+
+.user-notif-item .notif-title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+    color: #111827;
+}
+
+.user-notif-item .notif-message {
+    font-size: 0.8rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.user-notif-item .notif-time {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+.user-notif-empty {
+    padding: 2rem;
+    text-align: center;
+    color: #9ca3af;
+}

@@ -22,19 +22,19 @@
             </a>
             
             @auth
-            <div class="notification-wrapper">
-                <button class="header-icon" id="notificationBtn" title="Notifications">
+            <div class="user-notification-wrapper">
+                <button class="user-notification-btn" id="userNotificationBtn" title="Notifications" onclick="toggleUserNotificationDropdown()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6.002 6.002 0 0 0-4-5.659V5a2 2 0 1 0-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 1 1-6 0v-1m6 0H9" />
                     </svg>
-                    <span class="notification-badge" id="notifBadge" style="display: none;">0</span>
+                    <span class="user-notification-badge" id="userNotificationBadge" style="display: none;">0</span>
                 </button>
-                <div class="notification-dropdown" id="notifDropdown">
-                    <div class="notif-header">
+                <div class="user-notification-dropdown" id="userNotificationDropdown">
+                    <div class="user-notif-header">
                         <h4>Notifications</h4>
-                        <button onclick="markAllRead()">Mark all read</button>
+                        <button onclick="markAllUserNotificationsRead()">Mark all read</button>
                     </div>
-                    <div class="notif-list" id="notifList">
+                    <div class="user-notif-list" id="userNotificationList">
                         <div class="notif-empty">No notifications</div>
                     </div>
                 </div>

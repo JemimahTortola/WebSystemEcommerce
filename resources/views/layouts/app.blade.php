@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Flourista')</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/notifications.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user-notifications.css') }}">
     @yield('styles')
 </head>
 <body>
@@ -19,7 +19,7 @@
     @include('partials.footer')
 
     <script src="{{ asset('js/user/cart.js') }}"></script>
-    <script src="{{ asset('js/notification-badge.js') }}"></script>
+    <script src="{{ asset('js/user-notifications.js') }}"></script>
     @yield('scripts')
 </body>
 </html>
