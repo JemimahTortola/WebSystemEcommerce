@@ -25,7 +25,9 @@ async function loadNotifications() {
         const response = await fetch('/notifications/data', {
             headers: { 'Accept': 'application/json' }
         });
-        allNotifications = await response.json();
+        const data = await response.json();
+        // Handle both array and object response
+        allNotifications = Array.isArray(data) ? data : (data.data || []);
         renderNotifications();
         updateBadge();
     } catch (error) {
