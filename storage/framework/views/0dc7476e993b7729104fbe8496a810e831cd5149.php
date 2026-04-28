@@ -1,14 +1,12 @@
-@extends('layouts.admin')
+<?php $__env->startSection('title', 'Products - Flourista Admin'); ?>
 
-@section('title', 'Products - Flourista Admin')
+<?php $__env->startSection('page-title', 'Products'); ?>
 
-@section('page-title', 'Products')
+<?php $__env->startSection('styles'); ?>
+<link rel="stylesheet" href="<?php echo e(asset('css/admin/products.css')); ?>">
+<?php $__env->stopSection(); ?>
 
-@section('styles')
-<link rel="stylesheet" href="{{ asset('css/admin/products.css') }}">
-@endsection
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="page-header">
     <div>
         <h2>Products</h2>
@@ -94,8 +92,9 @@
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
-<script src="{{ asset('js/admin/products.js') }}"></script>
-@endsection
+<?php $__env->startSection('scripts'); ?>
+<script src="<?php echo e(asset('js/admin/products.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\jemim\Ecoms-apps\ecoms-florist\resources\views/admin/products.blade.php ENDPATH**/ ?>
