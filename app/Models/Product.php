@@ -9,18 +9,13 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'name', 'slug', 'description', 'type', 'price', 'stock', 'is_active'];
+    protected $fillable = ['category_id', 'name', 'slug', 'description', 'type', 'price', 'stock', 'is_active', 'image'];
 
     protected $casts = ['is_active' => 'boolean', 'price' => 'decimal:2'];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function occasions()
-    {
-        return $this->belongsToMany(Occasion::class, 'product_occasions');
     }
 
     public function images()

@@ -22,6 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'is_online',
+        'last_activity_at',
+        'banned_until',
+        'ban_reason',
     ];
 
     /**
@@ -41,7 +45,36 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_activity_at' => 'datetime',
+        'banned_until' => 'datetime',
+        'is_online' => 'boolean',
     ];
+
+    public function isBanned()
+    {
+        return $this->banned_until && $this->banned_until->isFuture();
+    }
+
+    public function ban($days, $reason = null)
+    {
+        $this->banned_until = now()->addDays($days);
+        $this->ban_reason = $reason;
+        $this->save();
+    }
+
+    public function unban()
+    {
+        $this->banned_until = null;
+        $this->ban_reason = null;
+        $this->save();
+    }
+
+    public function updateActivity()
+    {
+        $this->last_activity_at = now();
+        $this->is_online = true;
+        $this->save();
+    }
 
     public function roles()
     {

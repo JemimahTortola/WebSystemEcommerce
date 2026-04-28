@@ -7,6 +7,50 @@
 <link rel="stylesheet" href="{{ asset('css/user/checkout.css') }}">
 @endsection
 
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    const receiptUpload = document.getElementById('receiptUpload');
+    const receiptInput = document.getElementById('payment_receipt');
+    const paymentInfo = document.getElementById('paymentInfo');
+    const gcashInfo = document.getElementById('gcashInfo');
+    const bankInfo = document.getElementById('bankInfo');
+    
+    function toggleReceipt() {
+        const selected = document.querySelector('input[name="payment_method"]:checked');
+        if (!selected) return;
+        
+        if (selected.value === 'cod') {
+            receiptUpload.style.display = 'none';
+            paymentInfo.style.display = 'none';
+            receiptInput.removeAttribute('required');
+        } else {
+            receiptUpload.style.display = 'block';
+            paymentInfo.style.display = 'block';
+            receiptInput.setAttribute('required', 'required');
+            
+            // Show appropriate payment info
+            if (selected.value === 'gcash') {
+                gcashInfo.style.display = 'block';
+                bankInfo.style.display = 'none';
+            } else if (selected.value === 'bank') {
+                gcashInfo.style.display = 'none';
+                bankInfo.style.display = 'block';
+            }
+        }
+    }
+    
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', toggleReceipt);
+    });
+    
+    // Check initial state
+    toggleReceipt();
+});
+</script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="checkout-page">
@@ -22,7 +66,7 @@
             <a href="{{ route('shop') }}" class="btn btn-primary">Browse Shop</a>
         </div>
         @else
-        <form method="POST" action="{{ route('checkout.store') }}">
+        <form method="POST" action="{{ route('checkout.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="checkout-layout">
@@ -77,6 +121,25 @@
                                 </div>
                             </label>
                         </div>
+                        
+                        <div id="receiptUpload" style="display: none; margin-top: 1rem;">
+                            <div id="paymentInfo" style="display: none; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                                <h4 style="margin-bottom: 0.5rem;">Payment Details</h4>
+                                <div id="gcashInfo" style="display: none;">
+                                    <p><strong>GCash Number:</strong> 0912-345-6789</p>
+                                    <p><strong>Account Name:</strong> Flourista Flowers</p>
+                                </div>
+                                <div id="bankInfo" style="display: none;">
+                                    <p><strong>Bank:</strong> BPI</p>
+                                    <p><strong>Account Number:</strong> 1234-5678-9012</p>
+                                    <p><strong>Account Name:</strong> Flourista Flowers</p>
+                                </div>
+                            </div>
+                            
+                            <label for="payment_receipt"><strong>Upload Payment Receipt</strong></label>
+                            <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*" class="form-input" style="margin-top: 0.5rem;">
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Please upload your payment receipt for verification</p>
+                        </div>
                     </div>
                 </div>
 
@@ -91,6 +154,9 @@
                         <div class="item-details">
                             <span class="item-name">{{ $item->name }}</span>
                             <span class="item-qty">x{{ $item->quantity }}</span>
+                            @if($item->delivery_date)
+                            <span class="item-delivery">📅 {{ \Carbon\Carbon::parse($item->delivery_date)->format('M d, Y') }}</span>
+                            @endif
                         </div>
                         <span class="item-price">₱{{ number_format($subtotal, 0) }}</span>
                     </div>

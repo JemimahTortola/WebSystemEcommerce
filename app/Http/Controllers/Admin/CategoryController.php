@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -19,15 +20,31 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $category = Category::create($validated);
+        // Auto-generate slug from name
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $data = $request->except('image');
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('categories', 'public');
+            $data['image'] = $path;
+        }
+
+        $category = Category::create($data);
 
         return response()->json([
             'message' => 'Category created successfully!',
             'category' => $category,
         ]);
+    }
+
+    public function show(Category $category)
+    {
+        return response()->json($category->loadCount('products'));
     }
 
     public function update(Request $request, Category $category)
@@ -36,10 +53,23 @@ class CategoryController extends Controller
             'name' => 'sometimes|string|max:255',
             'slug' => 'sometimes|string|max:255|unique:categories,slug,' . $category->id,
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $category->update($validated);
+        $data = $request->except('image');
+
+        // Auto-generate slug from name if name is being updated
+        if ($request->has('name')) {
+            $data['slug'] = Str::slug($request->name);
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('categories', 'public');
+            $data['image'] = $path;
+        }
+
+        $category->update($data);
 
         return response()->json([
             'message' => 'Category updated successfully!',

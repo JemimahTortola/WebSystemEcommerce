@@ -179,6 +179,13 @@
     color: var(--text-dark);
 }
 
+.summary-item .item-delivery {
+    display: block;
+    color: var(--primary);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
 .order-summary .summary-row {
     display: flex;
     justify-content: space-between;

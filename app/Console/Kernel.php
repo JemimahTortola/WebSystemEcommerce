@@ -15,7 +15,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Mark users as offline if they've been inactive for more than 5 minutes
+        $schedule->call(function () {
+            \App\Models\User::where('is_online', true)
+                ->where('last_activity_at', '<', now()->subMinutes(5))
+                ->update(['is_online' => false]);
+        })->everyMinute();
     }
 
     /**

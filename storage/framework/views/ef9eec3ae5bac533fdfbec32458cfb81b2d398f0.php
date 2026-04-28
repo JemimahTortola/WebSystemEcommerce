@@ -9,6 +9,10 @@
 <?php $__env->startSection('content'); ?>
 <div class="page-header">
     <h2>Orders</h2>
+    <div class="view-toggle">
+        <button id="gridViewBtn" class="active" onclick="switchView('grid')">Grid</button>
+        <button id="calendarViewBtn" onclick="switchView('calendar')">Calendar</button>
+    </div>
 </div>
 
 <div class="filters-bar">
@@ -19,6 +23,15 @@
         <option value="completed">Completed</option>
         <option value="cancelled">Cancelled</option>
     </select>
+</div>
+
+<div id="calendarView" class="calendar-view-container" style="display: none;">
+    <div class="calendar-navigation">
+        <button class="calendar-nav-btn" onclick="changeMonth(-1)">← Previous</button>
+        <h3 id="calendarMonth">May 2026</h3>
+        <button class="calendar-nav-btn" onclick="changeMonth(1)">Next →</button>
+    </div>
+    <div class="calendar-view" id="calendarGrid"></div>
 </div>
 
 <div class="orders-grid" id="ordersGrid"></div>

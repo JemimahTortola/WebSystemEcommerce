@@ -14,6 +14,15 @@ class CategoriesHandler {
 
     bindEvents() {
         this.form?.addEventListener('submit', (e) => this.handleSubmit(e));
+        document.getElementById('categoryName')?.addEventListener('input', (e) => {
+            if (!this.editingId) this.generateSlug(e.target.value);
+        });
+    }
+
+    generateSlug(name) {
+        this.generatedSlug = name.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
     }
 
     async loadCategories() {
@@ -29,14 +38,13 @@ class CategoriesHandler {
     renderTable(categories) {
         const tbody = document.getElementById('categoriesTableBody');
         if (!categories.length) {
-            tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No categories found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No categories found</td></tr>';
             return;
         }
 
         tbody.innerHTML = categories.map(c => `
             <tr>
                 <td>${c.name}</td>
-                <td>${c.slug}</td>
                 <td>${c.products_count || 0}</td>
                 <td>
                     <button class="btn-action" onclick="editCategory(${c.id})">Edit</button>
@@ -46,16 +54,18 @@ class CategoriesHandler {
         `).join('');
     }
 
-    openCategoryModal(category = null) {
+    async openCategoryModal(category = null) {
         this.editingId = category?.id || null;
         document.getElementById('categoryModalTitle').textContent = category ? 'Edit Category' : 'Add Category';
         this.form.reset();
 
         if (category) {
-            Object.keys(category).forEach(key => {
-                const input = this.form.querySelector(`[name="${key}"]`);
-                if (input) input.value = category[key];
-            });
+            // Populate form fields
+            this.form.querySelector('[name="name"]').value = category.name || '';
+            this.form.querySelector('[name="description"]').value = category.description || '';
+            this.generatedSlug = category.slug;
+        } else {
+            this.generatedSlug = '';
         }
 
         this.modal.classList.add('active');
@@ -64,24 +74,34 @@ class CategoriesHandler {
     closeCategoryModal() {
         this.modal.classList.remove('active');
         this.editingId = null;
+        this.generatedSlug = '';
     }
 
     async handleSubmit(e) {
         e.preventDefault();
         const formData = new FormData(this.form);
-        const data = Object.fromEntries(formData.entries());
+
+        // Auto-generate slug
+        if (!this.editingId || !this.generatedSlug) {
+            const name = formData.get('name');
+            this.generateSlug(name);
+        }
+        formData.append('slug', this.generatedSlug);
+
+        // Add method spoofing for PUT
+        if (this.editingId) {
+            formData.append('_method', 'PUT');
+        }
 
         try {
             const url = this.editingId ? `/admin/categories/${this.editingId}` : '/admin/categories';
-            const method = this.editingId ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
-                method,
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': this.csrfToken,
                 },
-                body: JSON.stringify(data),
+                body: formData,
             });
 
             const result = await response.json();
@@ -91,6 +111,20 @@ class CategoriesHandler {
             }
         } catch (error) {
             console.error('Error saving category:', error);
+        }
+    }
+
+    async editCategory(id) {
+        try {
+            const response = await fetch(`/admin/categories/${id}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const category = await response.json();
+            this.openCategoryModal(category);
+        } catch (error) {
+            console.error('Error loading category:', error);
+            alert('Failed to load category details.');
         }
     }
 }
@@ -110,7 +144,7 @@ function closeCategoryModal() {
 }
 
 function editCategory(id) {
-    // Fetch and edit
+    categoriesHandler?.editCategory(id);
 }
 
 function deleteCategory(id) {

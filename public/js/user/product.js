@@ -68,7 +68,13 @@ class ProductDetailHandler {
 
         // Attach click event to Add to Cart button (if not disabled)
         if (addCartBtn && !addCartBtn.disabled) {
-            addCartBtn.addEventListener('click', () => this.addToCart());
+            // Remove any existing event listeners by cloning
+            const newBtn = addCartBtn.cloneNode(true);
+            addCartBtn.parentNode.replaceChild(newBtn, addCartBtn);
+            newBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.addToCart();
+            });
         }
 
         // Attach click event to Wishlist button
@@ -118,11 +124,13 @@ class ProductDetailHandler {
      * ==============================================================================
      */
     async addToCart() {
-        // Get quantity from input field
         const input = document.querySelector('.qty-input');
-        const quantity = parseInt(input?.value) || 1;
+        let quantity = parseInt(input?.value) || 1;
+        if (isNaN(quantity)) quantity = 1;
+        quantity = Math.max(1, quantity);
         
-        // Get product ID from the add to cart button's data attribute
+        const deliveryDate = document.querySelector('.delivery-date-input')?.value;
+        
         const addCartBtn = document.querySelector('.btn-add-cart');
         const productId = addCartBtn?.dataset?.productId;
 
@@ -131,36 +139,46 @@ class ProductDetailHandler {
             return;
         }
         
+        if (!deliveryDate) {
+            this.showAlert('Please select a delivery date', 'error');
+            return;
+        }
+
+        // Disable button to prevent double-clicks
+        addCartBtn.disabled = true;
+        addCartBtn.textContent = 'Adding...';
+        
         try {
             // Send POST request to /cart endpoint
             const response = await fetch('/cart', {
-                method: 'POST',                           // HTTP method for creating data
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // We're sending JSON
-                    'X-CSRF-TOKEN': this.csrfToken,    // Security token
-                    'Accept': 'application/json'       // We expect JSON back
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': this.csrfToken,
+                    'Accept': 'application/json'
                 },
-                // Convert object to JSON string
                 body: JSON.stringify({ 
-                    product_id: productId,  // Product ID
-                    quantity: quantity // How many to add
+                    product_id: productId,
+                    quantity: quantity,
+                    delivery_date: deliveryDate
                 })
             });
 
-            // Parse JSON response
             const result = await response.json();
 
-            // Check if request was successful
             if (response.ok) {
-                // Show success message
                 this.showAlert('Added to cart!', 'success');
+                // Update cart count in header
+                this.updateCartCount();
             } else {
-                // Show error from server or generic message
                 this.showAlert(result.message || 'Failed to add to cart', 'error');
             }
         } catch (error) {
-            // Network error or other issue
             this.showAlert('Please login to add items to cart', 'error');
+        } finally {
+            // Re-enable button
+            addCartBtn.disabled = false;
+            addCartBtn.textContent = 'Add to Cart';
         }
     }
 
@@ -170,11 +188,16 @@ class ProductDetailHandler {
      * ==============================================================================
      */
     async addToWishlist() {
-        // Get product slug from URL
-        const productSlug = window.location.pathname.split('/').pop();
+        const wishlistBtn = document.querySelector('.btn-wishlist');
+        const productId = wishlistBtn?.dataset?.productId;
+        console.log('Adding to wishlist, Product ID:', productId);
+
+        if (!productId) {
+            this.showAlert('Product not found', 'error');
+            return;
+        }
 
         try {
-            // Send POST request to /wishlist endpoint
             const response = await fetch('/wishlist', {
                 method: 'POST',
                 headers: {
@@ -182,32 +205,20 @@ class ProductDetailHandler {
                     'X-CSRF-TOKEN': this.csrfToken,
                     'Accept': 'application/json'
                 },
-                // Send product_id as the slug
-                body: JSON.stringify({ product_id: productSlug })
+                body: JSON.stringify({ product_id: productId })
             });
 
-            // Parse JSON response
             const result = await response.json();
-
-            // Log full response for debugging
             console.log('Wishlist response:', response.status, result);
 
-            // Check response status
-            if (response.status === 401) {
-                // Not logged in - redirect to login
-                window.location.href = result.redirect || '/login';
-                return;
-            }
-            
             if (response.ok) {
-                // Success!
                 this.showAlert('Added to wishlist!', 'success');
+            } else if (response.status === 401) {
+                window.location.href = result.redirect || '/login';
             } else {
-                // Error from server
                 this.showAlert(result.message || 'Failed to add to wishlist', 'error');
             }
         } catch (error) {
-            // Network error
             console.error('Wishlist error:', error);
             this.showAlert('Please login to add items to wishlist', 'error');
         }
@@ -237,8 +248,14 @@ class ProductDetailHandler {
             return;
         }
 
-        // Get product slug from URL
-        const productSlug = window.location.pathname.split('/').pop();
+        // Get product ID from hidden input
+        const productIdInput = form.querySelector('input[name="product_id"]');
+        const productId = productIdInput?.value;
+
+        if (!productId) {
+            this.showAlert('Product not found', 'error');
+            return;
+        }
 
         try {
             // Send POST request to /reviews endpoint
@@ -251,7 +268,7 @@ class ProductDetailHandler {
                 },
                 // Send all review data
                 body: JSON.stringify({
-                    product_id: productSlug,
+                    product_id: productId,
                     rating: rating,
                     comment: comment
                 })
@@ -262,12 +279,15 @@ class ProductDetailHandler {
 
             // Check if successful
             if (response.ok) {
-                this.showAlert('Review submitted! It will appear after approval.', 'success');
+                this.showAlert('Thank you! Your review has been submitted.', 'success');
                 form.reset();  // Clear the form
+                // Optionally reload to show the new review
+                setTimeout(() => window.location.reload(), 2000);
             } else {
                 this.showAlert(result.message || 'Failed to submit review', 'error');
             }
         } catch (error) {
+            console.error('Review error:', error);
             this.showAlert('Please login to write a review', 'error');
         }
     }
@@ -288,7 +308,6 @@ class ProductDetailHandler {
         const alert = document.createElement('div');
         
         // Set CSS class based on type
-        // Template literal: `alert alert-${type}` becomes 'alert alert-success' or 'alert alert-error'
         alert.className = `alert alert-${type} product-alert`;
         
         // Set message text
@@ -301,8 +320,30 @@ class ProductDetailHandler {
         if (container) {
             container.insertBefore(alert, container.firstChild);
             
-            // Auto-remove after 4 seconds
-            setTimeout(() => alert.remove(), 4000);
+            // Auto-remove after 3 seconds (faster removal)
+            setTimeout(() => alert.remove(), 3000);
+        }
+    }
+
+    /**
+     * ==============================================================================
+     * updateCartCount() - Update cart badge in header
+     * ==============================================================================
+     */
+    async updateCartCount() {
+        try {
+            const response = await fetch('/cart/count', {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const badge = document.getElementById('cartCount');
+                if (badge) {
+                    badge.textContent = data.count || 0;
+                }
+            }
+        } catch (error) {
+            console.error('Error updating cart count:', error);
         }
     }
 }

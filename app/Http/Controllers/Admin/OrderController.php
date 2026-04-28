@@ -18,15 +18,44 @@ class OrderController extends Controller
     public function data(Request $request)
     {
         try {
-            $query = Order::with('user');
-
+            $query = Order::with(['user', 'shipping']);
+            
             if ($request->status) {
                 $query->where('status', $request->status);
             }
-
+            
             $orders = $query->orderBy('created_at', 'desc')->get();
-
+            
             return response()->json($orders);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function calendarData(Request $request)
+    {
+        try {
+            $query = Order::with(['user', 'shipping'])
+                ->whereNotNull('delivery_date')
+                ->whereIn('status', ['processing', 'pending']);
+            
+            $orders = $query->orderBy('delivery_date', 'asc')->get();
+            
+            // Return array with properly formatted dates (avoid Eloquent cast issues)
+            $result = $orders->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'delivery_date' => $order->delivery_date ? $order->delivery_date->format('Y-m-d') : null,
+                    'status' => $order->status,
+                    'total_amount' => $order->total_amount,
+                    'user' => $order->user ? ['name' => $order->user->name] : null,
+                    'payment_method' => $order->payment_method,
+                    'payment_status' => $order->payment_status,
+                ];
+            });
+            
+            return response()->json($result);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -36,6 +65,10 @@ class OrderController extends Controller
     {
         $order->load(['user', 'items.product']);
 
+        if (request()->has('print')) {
+            return view('admin.order-print', compact('order'));
+        }
+
         return response()->json($order);
     }
 
@@ -44,6 +77,14 @@ class OrderController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:pending,processing,completed,cancelled',
         ]);
+
+        // If cancelling order, return items to stock
+        if ($validated['status'] === 'cancelled' && $order->status !== 'cancelled') {
+            $orderItems = DB::table('order_items')->where('order_id', $order->id)->get();
+            foreach ($orderItems as $item) {
+                DB::table('products')->where('id', $item->product_id)->increment('stock', $item->quantity);
+            }
+        }
 
         $order->update(['status' => $validated['status']]);
 

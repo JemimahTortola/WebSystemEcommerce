@@ -301,6 +301,47 @@ textarea.form-input {
 }
 
 /* ========================================================
+   MAP SECTION
+   ======================================================== */
+
+.map-section {
+    margin-top: 2rem;
+}
+
+.map-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.map-card h2 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.map-placeholder {
+    height: 300px;
+    background: linear-gradient(135deg, #fceef4 0%, #f9e8ef 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.map-icon {
+    font-size: 3rem;
+}
+
+.map-placeholder p {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* ========================================================
    ALERTS
    Success/error messages
    ======================================================== */
@@ -356,33 +397,3 @@ textarea.form-input {
         font-size: 1rem;
     }
 }
-
-/* ========================================================
-   CSS VARIABLES REFERENCE
- * ==============================================================================
- * 
- * These are defined in main CSS or :root:
- * 
- * :root {
- *     --primary: #e83e8c;       /* Primary pink */
- *     --white: #ffffff;          /* White */
- *     --text-dark: #333333;      /* Dark text */
- *     --text-muted: #666666;      /* Muted gray */
- *     --border: #e5e5e5;        /* Border gray */
- *     --light-bg: #f8f8f8;      /* Light background */
- * }
- *
- * Linear gradient: background that transitions between colors
- * Example: linear-gradient(135deg, #color1 0%, #color2 100%)
- *
- * Flexbox: One-dimensional layout
- * display: flex
- * align-items: center (vertical)
- * justify-content: center (horizontal)
- * gap: 20px (space between items)
- *
- * Grid: Two-dimensional layout
- * display: grid
- * grid-template-columns: 1fr 1fr (two equal)
- * gap: 20px (space between)
- */

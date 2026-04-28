@@ -24,7 +24,7 @@ public function index()
             $cartItems = DB::table('cart_items')
                 ->join('products', 'cart_items.product_id', '=', 'products.id')
                 ->where('cart_items.cart_id', $cart->id)
-                ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
+                ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'cart_items.delivery_date', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
                 ->get();
         }
         
@@ -39,6 +39,9 @@ public function index()
     {
         $productId = $request->product_id;
         $quantity = $request->quantity ?? 1;
+        $deliveryDate = $request->delivery_date;
+        
+        \Log::info('Cart add request', ['product_id' => $productId, 'quantity' => $quantity, 'user_id' => Auth::id()]);
 
         if (!Auth::check()) {
             return response()->json(['message' => 'Please login first'], 401);
@@ -60,19 +63,30 @@ public function index()
         $existing = DB::table('cart_items')
             ->where('cart_id', $cart->id)
             ->where('product_id', $productId)
+            ->where(function ($query) use ($deliveryDate) {
+                if ($deliveryDate) {
+                    $query->where('delivery_date', $deliveryDate);
+                } else {
+                    $query->whereNull('delivery_date');
+                }
+            })
             ->first();
 
         if ($existing) {
             DB::table('cart_items')
                 ->where('id', $existing->id)
-                ->update(['quantity' => $existing->quantity + $quantity]);
+                ->update([
+                    'quantity' => $quantity,
+                    'delivery_date' => $deliveryDate
+                ]);
         } else {
             DB::table('cart_items')->insert([
                 'cart_id' => $cart->id,
                 'user_id' => Auth::id(),
                 'product_id' => $productId,
                 'quantity' => $quantity,
-                'price' => $product->price
+                'price' => $product->price,
+                'delivery_date' => $deliveryDate
             ]);
         }
 
@@ -134,7 +148,7 @@ public function index()
         $cartItems = DB::table('cart_items')
             ->join('products', 'cart_items.product_id', '=', 'products.id')
             ->where('cart_items.cart_id', $cart->id)
-            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
+            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'cart_items.delivery_date', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
             ->get();
 
         return response()->json(['cartItems' => $cartItems]);
@@ -159,7 +173,7 @@ public function index()
         $cartItems = DB::table('cart_items')
             ->join('products', 'cart_items.product_id', '=', 'products.id')
             ->where('cart_items.cart_id', $cart->id)
-            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
+            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'cart_items.delivery_date', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug')
             ->get();
 
         if (request()->expectsJson()) {

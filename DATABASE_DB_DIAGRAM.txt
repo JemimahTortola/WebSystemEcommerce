@@ -1,0 +1,245 @@
+// Ecoms Florist - Database Schema for dbdiagram.io
+// Paste this into https://dbdiagram.io/
+
+Table users {
+  id int [pk, increment]
+  name varchar(255)
+  email varchar(255) [unique]
+  password varchar(255)
+  is_online boolean [default: false]
+  last_activity_at datetime [null]
+  banned_until datetime [null]
+  ban_reason text [null]
+  email_verified_at datetime [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table password_resets {
+  email varchar [ref: > users.email]
+  token varchar
+  created_at datetime [null]
+}
+
+Table failed_jobs {
+  id int [pk, increment]
+  uuid varchar [unique]
+  connection text
+  queue text
+  payload longtext
+  exception longtext
+  failed_at datetime [default: `now()`]
+}
+
+Table personal_access_tokens {
+  id int [pk, increment]
+  tokenable_type varchar
+  tokenable_id int
+  name varchar
+  token varchar(64) [unique]
+  abilities text [null]
+  last_used_at datetime [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table roles {
+  id int [pk, increment]
+  name varchar(50)
+  created_at datetime
+  updated_at datetime
+}
+
+Table user_roles {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  role_id int [ref: > roles.id]
+  created_at datetime
+  updated_at datetime
+}
+
+Table addresses {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  full_name varchar
+  phone varchar(50)
+  address text
+  city varchar(100)
+  postal_code varchar(20)
+  country varchar(100)
+  is_default boolean [default: false]
+  created_at datetime
+  updated_at datetime
+}
+
+Table categories {
+  id int [pk, increment]
+  name varchar(255)
+  slug varchar(255) [unique]
+  created_at datetime
+  updated_at datetime
+}
+
+Table products {
+  id int [pk, increment]
+  category_id int [ref: > categories.id]
+  name varchar(255)
+  slug varchar(255) [unique]
+  description text [null]
+  type varchar
+  price decimal(10,2)
+  stock int
+  is_active boolean [default: true]
+  image varchar [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table product_images {
+  id int [pk, increment]
+  product_id int [ref: > products.id]
+  image varchar
+  is_primary boolean [default: false]
+  created_at datetime
+  updated_at datetime
+}
+
+Table carts {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  created_at datetime
+  updated_at datetime
+}
+
+Table cart_items {
+  id int [pk, increment]
+  cart_id int [ref: > carts.id]
+  product_id int [ref: > products.id]
+  user_id int [ref: > users.id, null]
+  quantity int [default: 1]
+  price decimal(10,2)
+  delivery_date date [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table shipping {
+  id int [pk, increment]
+  shipping_name varchar
+  shipping_phone varchar(50)
+  shipping_address text
+  city varchar [null]
+  postal_code varchar(20) [null]
+  delivery_date date
+  delivery_time varchar(50)
+  delivery_notes text [null]
+  delivery_area_id int [ref: > delivery_areas.id, null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table orders {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  order_number varchar [unique]
+  total_amount decimal(10,2)
+  status varchar(50) [default: 'pending']
+  payment_method varchar(50) [null]
+  payment_status varchar(50) [default: 'pending']
+  shipping_id int [ref: > shipping.id, null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table order_items {
+  id int [pk, increment]
+  order_id int [ref: > orders.id]
+  product_id int [ref: > products.id]
+  product_name varchar
+  price decimal(10,2)
+  quantity int
+  subtotal decimal(10,2)
+  delivery_date date [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table payments {
+  id int [pk, increment]
+  order_id int [ref: > orders.id]
+  payment_method varchar(50)
+  transaction_id varchar
+  amount decimal(10,2)
+  status varchar(50)
+  paid_at datetime [null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table reviews {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  product_id int [ref: > products.id]
+  rating int
+  comment text [null]
+  admin_comment text [null]
+  status varchar(20) [default: 'pending']
+  is_visible boolean
+  created_at datetime
+  updated_at datetime
+  
+  indexes {
+    (user_id, product_id) [unique]
+  }
+}
+
+Table wishlists {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  product_id int [ref: > products.id]
+  created_at datetime
+  updated_at datetime
+  
+  indexes {
+    (user_id, product_id) [unique]
+  }
+}
+
+Table notifications {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  type varchar(50)
+  title varchar
+  message text
+  is_read boolean [default: false]
+  created_at datetime
+  updated_at datetime
+}
+
+Table delivery_areas {
+  id int [pk, increment]
+  city varchar(100)
+  province varchar(100)
+  delivery_fee decimal(10,2)
+  same_day_cutoff time [null]
+  is_active boolean [default: true]
+  created_at datetime
+  updated_at datetime
+}
+
+// Relationships
+// users 1--* orders
+// users 1--* addresses
+// users 1--* reviews
+// users 1--* wishlists
+// users 1--* carts
+// users *--* roles (via user_roles)
+// categories 1--* products
+// products 1--* order_items
+// products 1--* cart_items
+// products 1--* wishlists
+// orders 1--1 shipping
+// orders 1--* order_items
+// orders 1--* payments
+// shipping *--1 delivery_areas
+// carts 1--* cart_items

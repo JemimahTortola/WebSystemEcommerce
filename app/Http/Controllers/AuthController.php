@@ -78,6 +78,19 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $user = Auth::user();
+            
+            // Check if user is banned
+            if ($user->isBanned()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                
+                throw ValidationException::withMessages([
+                    'email' => ['Your account has been suspended until ' . $user->banned_until->format('F j, Y') . '. Reason: ' . ($user->ban_reason ?? 'No reason provided')],
+                ]);
+            }
+            
             $request->session()->regenerate();
 
             $redirect = $this->redirectTo();

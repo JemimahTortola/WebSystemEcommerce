@@ -9,6 +9,12 @@
 @section('content')
 <div class="container">
     <div class="product-detail-page">
+        @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-error">{{ session('error') }}</div>
+        @endif
         <!-- Product Main Info -->
         <div class="product-main">
             <div class="product-image-section">
@@ -39,11 +45,16 @@
                         <button type="button" class="qty-btn plus">+</button>
                     </div>
                     
+                    <div class="delivery-date-selector">
+                        <label for="delivery_date">Delivery Date:</label>
+                        <input type="date" id="delivery_date" name="delivery_date" class="delivery-date-input" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                    </div>
+                    
                     <button type="button" class="btn btn-add-cart" data-product-id="{{ $product->id }}" {{ $product->stock < 1 ? 'disabled' : '' }}>
                         🛒 Add to Cart
                     </button>
                     
-                    <button type="button" class="btn btn-wishlist">
+                    <button type="button" class="btn btn-wishlist" data-product-id="{{ $product->id }}">
                         ❤️ Add to Wishlist
                     </button>
                 </div>
@@ -60,7 +71,21 @@
                     <div class="review-item">
                         <div class="review-header">
                             <span class="review-user">{{ $review->user_name }}</span>
-                            <span class="review-rating">{{ str_repeat('⭐', $review->rating) }}</span>
+                            <div class="review-rating">
+                                @for($i = 1; $i <= 5; $i++)
+                                <span>{{ $i <= $review->rating ? '★' : '☆' }}</span>
+                                @endfor
+                            </div>
+                        </div>
+                        <p class="review-comment">{{ $review->comment }}</p>
+                        @if($review->admin_comment)
+                        <div class="admin-comment">
+                            <strong>Admin Response:</strong>
+                            <p>{{ $review->admin_comment }}</p>
+                        </div>
+                        @endif
+                        <span class="review-date">{{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y') }}</span>
+                    </div>
                         </div>
                         <p class="review-comment">{{ $review->comment }}</p>
                         <span class="review-date">{{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y') }}</span>
@@ -78,8 +103,8 @@
                 <h3>Write a Review</h3>
                 <div class="rating-select">
                     <label>Your Rating:</label>
-                    <select name="rating" class="form-input" required>
-                        <option value="">Select rating</option>
+                    <select name="rating" required>
+                        <option value="">Select your rating</option>
                         <option value="5">⭐⭐⭐⭐⭐ (5) - Excellent</option>
                         <option value="4">⭐⭐⭐⭐ (4) - Great</option>
                         <option value="3">⭐⭐⭐ (3) - Good</option>
@@ -88,7 +113,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <textarea name="comment" class="form-input" rows="4" placeholder="Share your experience with this product..." required></textarea>
+                    <textarea name="comment" rows="4" placeholder="Share your experience with this product..." required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit Review</button>
             </form>

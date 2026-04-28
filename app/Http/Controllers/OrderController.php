@@ -66,12 +66,14 @@ class OrderController extends Controller
             'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $path = $request->file('receipt')->store('receipts', 'public');
-
+        $path = $request->file('receipt')->store('receipts', 'public'); 
+        
         DB::table('orders')->where('id', $orderId)->update([
             'payment_receipt' => $path,
             'payment_status' => 'pending_verification'
         ]);
+        
+        \Log::info("Receipt uploaded for order #{$orderId}, status set to pending_verification");
 
         // Notify all admins about the receipt upload
         $admins = DB::table('users')

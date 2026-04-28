@@ -1,12 +1,10 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Login - Flourista'); ?>
 
-@section('title', 'Login - Flourista')
+<?php $__env->startSection('styles'); ?>
+<link rel="stylesheet" href="<?php echo e(asset('css/user/login.css')); ?>">
+<?php $__env->stopSection(); ?>
 
-@section('styles')
-<link rel="stylesheet" href="{{ asset('css/user/login.css') }}">
-@endsection
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="auth-page">
     <div class="auth-card">
         <div class="auth-header">
@@ -14,8 +12,8 @@
             <p>Login to your Flourista account</p>
         </div>
 
-        <form id="loginForm" class="auth-form" method="POST" action="{{ route('login') }}">
-            @csrf
+        <form id="loginForm" class="auth-form" method="POST" action="<?php echo e(route('login')); ?>">
+            <?php echo csrf_field(); ?>
             
             <div class="login-section">
                 <div class="form-group">
@@ -29,7 +27,7 @@
                         class="form-input" 
                         placeholder="Enter your email address"
                         required
-                        value="{{ old('email') }}"
+                        value="<?php echo e(old('email')); ?>"
                     >
                 </div>
 
@@ -59,14 +57,15 @@
             </button>
 
             <div class="auth-links">
-                <p><a href="{{ route('password.request') }}">Forgot your password?</a></p>
-                <p>Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
+                <p><a href="<?php echo e(route('password.request')); ?>">Forgot your password?</a></p>
+                <p>Don't have an account? <a href="<?php echo e(route('register')); ?>">Register here</a></p>
             </div>
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
-<script src="{{ asset('js/auth.js') }}"></script>
-@endsection
+<?php $__env->startSection('scripts'); ?>
+<script src="<?php echo e(asset('js/auth.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\jemim\Ecoms-apps\ecoms-florist\resources\views/auth/login.blade.php ENDPATH**/ ?>

@@ -138,6 +138,16 @@
     font-size: 1rem;
 }
 
+/* Cart Item Delivery Date */
+.cart-item-delivery {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
 /* Cart Item Remove */
 .cart-item-remove {
     flex-shrink: 0;

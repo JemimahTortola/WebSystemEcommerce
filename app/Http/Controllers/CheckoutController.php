@@ -17,7 +17,7 @@ class CheckoutController extends Controller
         $cartItems = DB::table('cart_items')
             ->join('products', 'cart_items.product_id', '=', 'products.id')
             ->where('cart_items.user_id', Auth::id())
-            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug', 'products.stock')
+            ->select('cart_items.id as cart_item_id', 'cart_items.quantity', 'cart_items.delivery_date', 'products.id', 'products.name', 'products.price', 'products.image', 'products.slug', 'products.stock')
             ->get();
             
         if ($cartItems->count() === 0) {
@@ -38,10 +38,17 @@ class CheckoutController extends Controller
             return redirect()->route('login');
         }
         
-        $request->validate([
+        $validationRules = [
             'address_id' => 'required|exists:addresses,id',
             'payment_method' => 'required|in:cod,gcash,bank'
-        ]);
+        ];
+        
+        // Only require receipt for non-COD payments
+        if ($request->payment_method !== 'cod') {
+            $validationRules['payment_receipt'] = 'required|image|max:2048';
+        }
+        
+        $request->validate($validationRules);
         
         $address = DB::table('addresses')->where('id', $request->address_id)->first();
         
@@ -61,21 +68,31 @@ class CheckoutController extends Controller
         
         $orderNumber = 'ORD-' . strtoupper(uniqid());
         
-        $orderId = DB::table('orders')->insertGetId([
+        $deliveryDate = $cartItems->first()->delivery_date ?? now()->addDays(1);
+        
+        $orderData = [
             'user_id' => Auth::id(),
             'order_number' => $orderNumber,
             'status' => 'pending',
             'total_amount' => $total,
             'payment_method' => $request->payment_method,
-            'payment_status' => 'pending',
+            'payment_status' => $request->payment_method === 'cod' ? 'pending' : 'pending_verification',
             'shipping_name' => $address->full_name,
             'shipping_phone' => $address->phone,
             'shipping_address' => $address->address . ', ' . $address->city . ', ' . $address->postal_code,
-            'delivery_date' => now()->addDays(1),
+            'delivery_date' => $deliveryDate,
             'delivery_time' => '9:00 AM - 5:00 PM',
             'created_at' => now(),
             'updated_at' => now()
-        ]);
+        ];
+        
+        // Handle receipt upload for non-COD payments
+        if ($request->hasFile('payment_receipt')) {
+            $path = $request->file('payment_receipt')->store('receipts', 'public');
+            $orderData['payment_receipt'] = $path;
+        }
+        
+        $orderId = DB::table('orders')->insertGetId($orderData);
         
         foreach ($cartItems as $item) {
             $product = DB::table('products')->where('id', $item->product_id)->first();
@@ -85,8 +102,12 @@ class CheckoutController extends Controller
                 'product_name' => $product->name,
                 'quantity' => $item->quantity,
                 'price' => $product->price,
-                'subtotal' => $product->price * $item->quantity
+                'subtotal' => $product->price * $item->quantity,
+                'delivery_date' => $item->delivery_date
             ]);
+            
+            // Decrease product stock
+            DB::table('products')->where('id', $item->product_id)->decrement('stock', $item->quantity);
         }
         
         // Check if order has items, if not delete order

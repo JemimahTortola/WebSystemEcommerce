@@ -17,7 +17,15 @@ class DashboardController extends Controller
     public function data()
     {
         try {
-            $totalRevenue = Order::where('status', 'completed')->sum('total_amount');
+            $totalRevenue = Order::where(function ($query) {
+                $query->where(function ($q) {
+                    $q->where('payment_method', 'cod')
+                      ->where('status', 'completed');
+                })->orWhere(function ($q) {
+                    $q->whereIn('payment_method', ['gcash', 'bank'])
+                      ->where('payment_status', 'verified');
+                });
+            })->sum('total_amount');
             $totalOrders = Order::count();
             $totalCustomers = DB::table('user_roles')
                 ->where('role_id', 2)
@@ -36,7 +44,9 @@ class DashboardController extends Controller
 
             $topProducts = DB::table('order_items')
                 ->join('products', 'order_items.product_id', '=', 'products.id')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
                 ->select('products.name', DB::raw('SUM(order_items.quantity) as sold'))
+                ->whereIn('orders.status', ['processing', 'completed'])
                 ->groupBy('products.id', 'products.name')
                 ->orderByDesc('sold')
                 ->limit(5)

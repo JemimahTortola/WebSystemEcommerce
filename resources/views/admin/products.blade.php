@@ -51,16 +51,10 @@
             <h2 id="productModalTitle">Add Product</h2>
             <button class="modal-close" onclick="closeProductModal()">×</button>
         </div>
-        <form id="productForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>Slug</label>
-                    <input type="text" name="slug" required>
-                </div>
+        <form id="productForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" id="productName" required>
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -78,8 +72,11 @@
                     <input type="number" name="stock" required>
                 </div>
                 <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="text" name="image">
+                    <label>Image</label>
+                    <input type="file" name="image" id="productImage" accept="image/*">
+                    <div id="currentImage" style="margin-top: 8px; display: none;">
+                        <small>Current: <img src="" id="currentImagePreview" style="width: 60px; height: 60px; object-fit: cover;"></small>
+                    </div>
                 </div>
             </div>
             <div class="form-group">

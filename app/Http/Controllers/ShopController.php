@@ -61,7 +61,7 @@ class ShopController extends Controller
         // Reviews for this product (show any for demo purposes)
         $reviews = DB::table('reviews')
             ->join('users', 'reviews.user_id', '=', 'users.id')
-            ->select('reviews.id', 'reviews.user_id', 'reviews.product_id', 'reviews.rating', 'reviews.comment', 'reviews.created_at', 'users.name as user_name')
+            ->select('reviews.id', 'reviews.user_id', 'reviews.product_id', 'reviews.rating', 'reviews.comment', 'reviews.admin_comment', 'reviews.created_at', 'users.name as user_name')
             ->where('reviews.product_id', $product->id)
             ->orderBy('reviews.created_at', 'desc')
             ->limit(5)

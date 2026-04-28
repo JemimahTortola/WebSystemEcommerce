@@ -26,7 +26,7 @@
             <div class="order-amount">₱{{ number_format($order->total_amount, 2) }}</div>
             <div class="order-actions">
                 <a href="{{ route('orders.show', $order->id) }}" class="btn-details">View</a>
-                @if(($order->payment_status ?? '') === 'pending' || ($order->payment_status ?? '') === 'pending_verification')
+                @if($order->payment_method !== 'cod' && in_array($order->payment_status ?? '', ['pending', 'rejected']))
                 <button class="btn-upload-receipt" onclick="openReceiptModal({{ $order->id }})">Receipt</button>
                 @endif
             </div>

@@ -21,7 +21,6 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Slug</th>
                 <th>Products</th>
                 <th>Actions</th>
             </tr>
@@ -39,19 +38,15 @@
         <form id="categoryForm">
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" required>
-            </div>
-            <div class="form-group">
-                <label>Slug</label>
-                <input type="text" name="slug" required>
+                <input type="text" name="name" id="categoryName" required>
             </div>
             <div class="form-group">
                 <label>Description</label>
                 <textarea name="description" rows="3"></textarea>
             </div>
             <div class="form-group">
-                <label>Image URL</label>
-                <input type="text" name="image">
+                <label>Image</label>
+                <input type="file" name="image" accept="image/*">
             </div>
             <div class="form-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Cancel</button>

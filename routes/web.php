@@ -37,6 +37,52 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 
 /*
 |--------------------------------------------------------------------------
+| Web Routes - Password Reset (Public)
+|--------------------------------------------------------------------------
+*/
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
+
+Route::post('/forgot-password', function (Illuminate\Http\Request $request) {
+    $request->validate(['email' => 'required|email']);
+    
+    $status = Illuminate\Support\Facades\Password::sendResetLink(
+        $request->only('email')
+    );
+    
+    return $status === Illuminate\Support\Facades\Password::RESET_LINK_SENT
+        ? back()->with(['success' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.email');
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->name('password.reset');
+
+Route::post('/reset-password', function (Illuminate\Http\Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|confirmed|min:8',
+    ]);
+ 
+    $status = Illuminate\Support\Facades\Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => bcrypt($password)
+            ])->save();
+        }
+    );
+ 
+    return $status === Illuminate\Support\Facades\Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('success', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
+})->name('password.update');
+
+/*
+|--------------------------------------------------------------------------
 | Web Routes - Admin Section (lines 27-65)
 |--------------------------------------------------------------------------
 |
@@ -66,6 +112,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/data', [ProductController::class, 'data'])->name('products.data');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
@@ -76,6 +123,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
     Route::get('/orders/data', [AdminOrderController::class, 'data'])->name('orders.data');
+    Route::get('/orders/calendar-data', [AdminOrderController::class, 'calendarData'])->name('orders.calendarData');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::put('/orders/{order}/verify-payment', [AdminOrderController::class, 'verifyPayment'])->name('orders.verifyPayment');
@@ -88,9 +136,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/data', [UserController::class, 'data'])->name('users.data');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
+    Route::post('/users/{user}/unban', [UserController::class, 'unban'])->name('users.unban');
 
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews');
     Route::get('/reviews/data', [AdminReviewController::class, 'data'])->name('reviews.data');
+    Route::get('/reviews/{review}', [AdminReviewController::class, 'show'])->name('reviews.show');
     Route::put('/reviews/{review}', [AdminReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 });

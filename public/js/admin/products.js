@@ -17,6 +17,17 @@ class ProductsHandler {
         document.getElementById('searchInput')?.addEventListener('input', () => this.loadProducts());
         document.getElementById('categoryFilter')?.addEventListener('change', () => this.loadProducts());
         this.form?.addEventListener('submit', (e) => this.handleSubmit(e));
+        document.getElementById('productName')?.addEventListener('input', (e) => {
+            if (!this.editingId) this.generateSlug(e.target.value);
+        });
+    }
+
+    generateSlug(name) {
+        const slug = name.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        // Store slug in a hidden field or data attribute for submission
+        this.generatedSlug = slug;
     }
 
     async loadProducts(page = 1) {
@@ -43,20 +54,34 @@ class ProductsHandler {
             return;
         }
 
-        tbody.innerHTML = products.map(p => `
-            <tr>
-                <td><img src="${p.image || 'https://via.placeholder.com/60'}" class="table-image"></td>
-                <td>${p.name}</td>
-                <td>${p.category?.name || '-'}</td>
-                <td>₱${Number(p.price).toFixed(2)}</td>
-                <td>${p.stock}</td>
-                <td><span class="status-badge ${p.is_active ? 'active' : 'inactive'}">${p.is_active ? 'Active' : 'Inactive'}</span></td>
-                <td>
-                    <button class="btn-action" onclick="editProduct(${p.id})">Edit</button>
-                    <button class="btn-action btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
-                </td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = products.map(p => {
+            // Handle both storage paths and direct image paths
+            let imageSrc = 'https://via.placeholder.com/60';
+            if (p.image) {
+                if (p.image.startsWith('/images/')) {
+                    imageSrc = p.image;
+                } else if (p.image.startsWith('products/')) {
+                    imageSrc = '/storage/' + p.image;
+                } else {
+                    imageSrc = p.image;
+                }
+            }
+            
+            return `
+                <tr>
+                    <td><img src="${imageSrc}" class="table-image" onerror="this.src='https://via.placeholder.com/60'"></td>
+                    <td>${p.name}</td>
+                    <td>${p.category?.name || '-'}</td>
+                    <td>₱${Number(p.price).toFixed(2)}</td>
+                    <td>${p.stock}</td>
+                    <td><span class="status-badge ${p.is_active ? 'active' : 'inactive'}">${p.is_active ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="btn-action" onclick="editProduct(${p.id})">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     }
 
     renderPagination(data) {
@@ -97,16 +122,35 @@ class ProductsHandler {
         }
     }
 
-    openProductModal(product = null) {
+    async openProductModal(product = null) {
         this.editingId = product?.id || null;
         document.getElementById('productModalTitle').textContent = product ? 'Edit Product' : 'Add Product';
         this.form.reset();
+        document.getElementById('currentImage').style.display = 'none';
 
         if (product) {
-            Object.keys(product).forEach(key => {
-                const input = this.form.querySelector(`[name="${key}"]`);
-                if (input) input.value = product[key];
-            });
+            // Populate form fields
+            this.form.querySelector('[name="name"]').value = product.name || '';
+            this.form.querySelector('[name="price"]').value = product.price || '';
+            this.form.querySelector('[name="stock"]').value = product.stock || '';
+            this.form.querySelector('[name="description"]').value = product.description || '';
+            this.form.querySelector('[name="category_id"]').value = product.category_id || '';
+            this.form.querySelector('[name="is_active"]').checked = product.is_active !== false;
+
+            // Show current image if exists
+            if (product.image) {
+                let imageSrc = product.image;
+                if (product.image.startsWith('products/')) {
+                    imageSrc = '/storage/' + product.image;
+                }
+                document.getElementById('currentImagePreview').src = imageSrc;
+                document.getElementById('currentImage').style.display = 'block';
+            }
+
+            // Store slug for update
+            this.generatedSlug = product.slug;
+        } else {
+            this.generatedSlug = '';
         }
 
         this.modal.classList.add('active');
@@ -115,25 +159,37 @@ class ProductsHandler {
     closeProductModal() {
         this.modal.classList.remove('active');
         this.editingId = null;
+        this.generatedSlug = '';
     }
 
     async handleSubmit(e) {
         e.preventDefault();
         const formData = new FormData(this.form);
-        const data = Object.fromEntries(formData.entries());
-        data.is_active = formData.has('is_active');
+
+        // Add auto-generated slug
+        if (!this.editingId || !this.generatedSlug) {
+            const name = formData.get('name');
+            this.generateSlug(name);
+        }
+        formData.append('slug', this.generatedSlug);
+
+        // Handle checkbox
+        formData.set('is_active', formData.has('is_active') ? '1' : '0');
+
+        // Add method spoofing for PUT (update)
+        if (this.editingId) {
+            formData.append('_method', 'PUT');
+        }
 
         try {
             const url = this.editingId ? `/admin/products/${this.editingId}` : '/admin/products';
-            const method = this.editingId ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
-                method,
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': this.csrfToken,
                 },
-                body: JSON.stringify(data),
+                body: formData,
             });
 
             const result = await response.json();
@@ -143,6 +199,20 @@ class ProductsHandler {
             }
         } catch (error) {
             console.error('Error saving product:', error);
+        }
+    }
+
+    async editProduct(id) {
+        try {
+            const response = await fetch(`/admin/products/${id}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const product = await response.json();
+            this.openProductModal(product);
+        } catch (error) {
+            console.error('Error loading product:', error);
+            alert('Failed to load product details. Please try again.');
         }
     }
 }
@@ -162,13 +232,7 @@ function closeProductModal() {
 }
 
 function editProduct(id) {
-    const products = document.querySelectorAll('#productsTableBody tr');
-    products.forEach(row => {
-        if (row.querySelector('[onclick*="editProduct"]')?.getAttribute('onclick').includes(id)) {
-            const cells = row.querySelectorAll('td');
-            // Find and open for edit
-        }
-    });
+    productsHandler?.editProduct(id);
 }
 
 function deleteProduct(id) {
