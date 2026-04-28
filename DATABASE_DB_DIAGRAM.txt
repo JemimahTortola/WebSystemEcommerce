@@ -123,14 +123,14 @@ Table cart_items {
   updated_at datetime
 }
 
-Table shipping {
+Table shippings {
   id int [pk, increment]
   shipping_name varchar
   shipping_phone varchar(50)
   shipping_address text
   city varchar [null]
   postal_code varchar(20) [null]
-  delivery_date date
+  delivery_date date [null]
   delivery_time varchar(50)
   delivery_notes text [null]
   delivery_area_id int [ref: > delivery_areas.id, null]
@@ -141,12 +141,13 @@ Table shipping {
 Table orders {
   id int [pk, increment]
   user_id int [ref: > users.id]
-  order_number varchar [unique]
+  order_number varchar(255) [unique]
   total_amount decimal(10,2)
   status varchar(50) [default: 'pending']
   payment_method varchar(50) [null]
   payment_status varchar(50) [default: 'pending']
-  shipping_id int [ref: > shipping.id, null]
+  shipping_id int [ref: > shippings.id, null]
+  payment_receipt varchar(255) [null]
   created_at datetime
   updated_at datetime
 }
@@ -209,7 +210,7 @@ Table notifications {
   id int [pk, increment]
   user_id int [ref: > users.id]
   type varchar(50)
-  title varchar
+  title varchar(255)
   message text
   is_read boolean [default: false]
   created_at datetime
@@ -235,11 +236,12 @@ Table delivery_areas {
 // users 1--* carts
 // users *--* roles (via user_roles)
 // categories 1--* products
+// products 1--* product_images
 // products 1--* order_items
 // products 1--* cart_items
 // products 1--* wishlists
-// orders 1--1 shipping
+// orders 1--1 shippings
 // orders 1--* order_items
 // orders 1--* payments
-// shipping *--1 delivery_areas
+// shippings *--1 delivery_areas
 // carts 1--* cart_items
