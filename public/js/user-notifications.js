@@ -1,51 +1,51 @@
-// User Notification System - Separate from Admin
-let userNotifications = [];
+// User Notification System - EXACTLY the same as Admin
+let allNotifications = [];
 
-// Toggle notification dropdown for users
-function toggleUserNotificationDropdown() {
-    const dropdown = document.getElementById('userNotificationDropdown');
+// Toggle notification dropdown (same as admin)
+function toggleNotificationDropdown() {
+    const dropdown = document.getElementById('notifDropdown');
     if (dropdown) {
         dropdown.classList.toggle('active');
         if (dropdown.classList.contains('active')) {
-            loadUserNotifications();
+            loadNotifications();
         }
     }
 }
 
 // Close dropdown when clicking outside
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.user-notification-wrapper')) {
-        document.getElementById('userNotificationDropdown')?.classList.remove('active');
+    if (!e.target.closest('.notification-wrapper')) {
+        document.getElementById('notifDropdown')?.classList.remove('active');
     }
 });
 
-// Load user notifications
-async function loadUserNotifications() {
+// Load notifications (same as admin)
+async function loadNotifications() {
     try {
         const response = await fetch('/notifications/data', {
             headers: { 'Accept': 'application/json' }
         });
-        userNotifications = await response.json();
-        renderUserNotifications();
-        updateUserNotificationBadge();
+        allNotifications = await response.json();
+        renderNotifications();
+        updateBadge();
     } catch (error) {
-        console.error('Error loading user notifications:', error);
+        console.error('Error loading notifications:', error);
     }
 }
 
-// Render notifications in dropdown
-function renderUserNotifications() {
-    const list = document.getElementById('userNotificationList');
+// Render notifications in dropdown (same as admin)
+function renderNotifications() {
+    const list = document.getElementById('notifList');
     if (!list) return;
     
-    if (!userNotifications.length) {
+    if (!allNotifications.length) {
         list.innerHTML = '<div class="notif-empty">No notifications</div>';
         return;
     }
     
-    list.innerHTML = userNotifications.map(notif => `
-        <div class="notif-item ${notif.is_read ? '' : 'unread'}" onclick="markUserNotificationRead(${notif.id})">
-            <div class="notif-icon">${getNotificationIcon(notif.type)}</div>
+    list.innerHTML = allNotifications.map(notif => `
+        <div class="notif-item ${notif.is_read ? '' : 'unread'}" onclick="markRead(${notif.id})">
+            <div class="notif-icon">${getIcon(notif.type)}</div>
             <div class="notif-content">
                 <div class="notif-title">${notif.title}</div>
                 <div class="notif-message">${notif.message}</div>
@@ -55,19 +55,18 @@ function renderUserNotifications() {
     `).join('');
 }
 
-// Get icon based on notification type
-function getNotificationIcon(type) {
+// Get icon based on notification type (same as admin)
+function getIcon(type) {
     const icons = {
         'payment_verified': '✅',
-        'payment_rejected': '❌',
-        'order_status': '📦',
-        'order_cancelled': '⚠️',
+        'order_status': '🚚',
+        'order_cancelled': '⛔️',
         'welcome': '🎉',
     };
     return icons[type] || '🔔';
 }
 
-// Time ago helper
+// Time ago helper (same as admin)
 function timeAgo(datetime) {
     const now = new Date();
     const date = new Date(datetime);
@@ -79,8 +78,8 @@ function timeAgo(datetime) {
     return Math.floor(seconds / 86400) + 'd ago';
 }
 
-// Mark single notification as read
-async function markUserNotificationRead(id) {
+// Mark single notification as read (same as admin)
+async function markRead(id) {
     try {
         await fetch('/notifications/mark-read', {
             method: 'POST',
@@ -90,14 +89,14 @@ async function markUserNotificationRead(id) {
             },
             body: JSON.stringify({ id })
         });
-        loadUserNotifications();
+        loadNotifications();
     } catch (error) {
         console.error('Error marking notification as read:', error);
     }
 }
 
-// Mark all as read
-async function markAllUserNotificationsRead() {
+// Mark all as read (same as admin)
+async function markAllRead() {
     try {
         await fetch('/notifications/read-all', {
             method: 'POST',
@@ -105,27 +104,24 @@ async function markAllUserNotificationsRead() {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         });
-        loadUserNotifications();
+        loadNotifications();
     } catch (error) {
         console.error('Error marking all as read:', error);
     }
 }
 
-// Update badge count
-function updateUserNotificationBadge() {
-    const unreadCount = userNotifications.filter(n => !n.is_read).length;
-    const badge = document.getElementById('userNotificationBadge');
+// Update badge count (same as admin)
+function updateBadge() {
+    const unreadCount = allNotifications.filter(n => !n.is_read).length;
+    const badge = document.getElementById('notifBadge');
     if (badge) {
         badge.textContent = unreadCount;
         badge.style.display = unreadCount > 0 ? 'block' : 'none';
     }
 }
 
-// Initialize on page load
+// Load notifications on page load and check every 30 seconds (same as admin)
 document.addEventListener('DOMContentLoaded', () => {
-    // Load notifications on page load
-    loadUserNotifications();
-    
-    // Check for new notifications every 30 seconds
-    setInterval(loadUserNotifications, 30000);
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
 });
