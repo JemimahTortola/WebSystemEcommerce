@@ -124,6 +124,9 @@ function updateBadge() {
 
 // Load notifications on page load and check every 30 seconds (same as admin)
 document.addEventListener('DOMContentLoaded', () => {
-    loadNotifications();
-    setInterval(loadNotifications, 30000);
+    // Only run if notification elements exist (user is logged in)
+    if (document.getElementById('notifDropdown') && document.getElementById('notifBadge')) {
+        loadNotifications();
+        setInterval(loadNotifications, 30000);
+    }
 });
