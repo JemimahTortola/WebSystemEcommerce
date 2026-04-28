@@ -38,7 +38,6 @@ class ReviewsHandler {
                 <td>${new Date(r.created_at).toLocaleDateString()}</td>
                 <td>
                     <button class="btn-action" onclick="viewReview(${r.id})">Comment</button>
-                    <button class="btn-action" onclick="toggleReview(${r.id})">${r.is_visible ? 'Hide' : 'Show'}</button>
                 </td>
             </tr>
         `).join('');
