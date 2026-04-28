@@ -1,28 +1,44 @@
-/* Notification Dropdown Styles (same as admin) */
+/* Notification Styles - Same as Admin */
+
+/* Notification Badge */
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* Notification Wrapper */
 .notification-wrapper {
     position: relative;
     display: inline-block;
 }
 
+/* Notification Dropdown */
 .notification-dropdown {
+    display: none;
     position: absolute;
     top: 100%;
     right: 0;
     width: 350px;
-    max-height: 400px;
-    overflow-y: auto;
     background: white;
-    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    display: none;
+    margin-top: 0.5rem;
 }
 
 .notification-dropdown.active {
     display: block;
 }
 
+/* Notification Header */
 .notif-header {
     display: flex;
     justify-content: space-between;
@@ -32,27 +48,28 @@
 }
 
 .notif-header h4 {
-    margin: 0;
     font-size: 1rem;
+    font-weight: 600;
 }
 
 .notif-header button {
     background: none;
     border: none;
-    color: #3b82f6;
+    color: #e8a5aa;
     cursor: pointer;
     font-size: 0.875rem;
 }
 
+/* Notification List */
 .notif-list {
-    max-height: 350px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
+/* Notification Item */
 .notif-item {
-    display: flex;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #f3f4f6;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -62,34 +79,21 @@
 }
 
 .notif-item.unread {
-    background: #eff6ff;
+    background: #f0f9ff;
 }
 
-.notif-icon {
-    font-size: 1.25rem;
-    margin-right: 0.75rem;
-    min-width: 24px;
-    text-align: center;
-}
-
-.notif-content {
-    flex: 1;
-}
-
-.notif-title {
+.notif-item .notif-title {
     font-weight: 600;
     font-size: 0.875rem;
-    color: #111827;
     margin-bottom: 0.25rem;
 }
 
-.notif-message {
-    font-size: 0.8125rem;
+.notif-item .notif-message {
+    font-size: 0.8rem;
     color: #6b7280;
-    line-height: 1.4;
 }
 
-.notif-time {
+.notif-item .notif-time {
     font-size: 0.75rem;
     color: #9ca3af;
     margin-top: 0.25rem;
@@ -104,7 +108,7 @@
 /* Notifications List Page */
 .notifications-list {
     max-width: 800px;
-    margin:0 auto;
+    margin: 0 auto;
 }
 
 .notification-item {
