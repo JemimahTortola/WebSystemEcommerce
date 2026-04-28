@@ -19,6 +19,7 @@
     @include('partials.footer')
 
     <script src="{{ asset('js/user/cart.js') }}"></script>
+    <script src="{{ asset('js/notification-badge.js') }}"></script>
     @yield('scripts')
 </body>
 </html>
