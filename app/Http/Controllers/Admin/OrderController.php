@@ -78,6 +78,8 @@ class OrderController extends Controller
             'status' => 'required|in:pending,processing,completed,cancelled',
         ]);
 
+        $oldStatus = $order->status;
+
         // If cancelling order, return items to stock
         if ($validated['status'] === 'cancelled' && $order->status !== 'cancelled') {
             $orderItems = DB::table('order_items')->where('order_id', $order->id)->get();
@@ -87,6 +89,19 @@ class OrderController extends Controller
         }
 
         $order->update(['status' => $validated['status']]);
+
+        // Send notification to user about status change
+        if ($oldStatus !== $validated['status']) {
+            DB::table('notifications')->insert([
+                'user_id' => $order->user_id,
+                'type' => 'order_status',
+                'title' => 'Order Status Updated',
+                'message' => 'Your order #' . $order->order_number . ' status has been changed from ' . $oldStatus . ' to ' . $validated['status'],
+                'is_read' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return response()->json([
             'message' => 'Order status updated!',
@@ -103,11 +118,16 @@ class OrderController extends Controller
         $order->update(['payment_status' => $validated['payment_status']]);
 
         // Notify user about payment verification
+        $title = $validated['payment_status'] === 'verified' ? 'Payment Verified' : 'Payment Rejected';
+        $message = $validated['payment_status'] === 'verified' 
+            ? 'Your payment for Order #' . $order->order_number . ' has been verified. Your order is now being processed.'
+            : 'Your payment for Order #' . $order->order_number . ' has been rejected. Please upload a valid receipt or contact support.';
+
         DB::table('notifications')->insert([
             'user_id' => $order->user_id,
             'type' => 'payment_verified',
-            'title' => 'Payment ' . ucfirst($validated['payment_status']),
-            'message' => 'Your payment for Order #' . $order->id . ' has been ' . $validated['payment_status'] . '.',
+            'title' => $title,
+            'message' => $message,
             'is_read' => false,
             'created_at' => now(),
             'updated_at' => now(),

@@ -220,4 +220,5 @@ Route::get('/profile', [AuthController::class, 'profile'])->name('profile')->mid
 Route::put('/profile', [AuthController::class, 'profile'])->name('profile.update')->middleware('auth'); // Update profile
 Route::get('/notifications', [AuthController::class, 'notifications'])->name('notifications')->middleware('auth'); // Notifications
 Route::get('/notifications/data', [AuthController::class, 'notificationsData'])->name('notifications.data')->middleware('auth'); // Notifications data
+Route::post('/notifications/mark-read', [AuthController::class, 'markNotificationRead'])->name('notifications.markRead')->middleware('auth'); // Mark single as read
 Route::post('/notifications/read-all', [AuthController::class, 'markAllNotificationsRead'])->name('notifications.readAll')->middleware('auth'); // Mark all read

@@ -155,6 +155,17 @@ class AuthController extends Controller
         return response()->json($notifications);
     }
 
+    public function markNotificationRead(Request $request)
+    {
+        $request->validate(['id' => 'required|integer']);
+        
+        Auth::user()->notifications()
+            ->where('id', $request->id)
+            ->update(['is_read' => true]);
+            
+        return response()->json(['message' => 'Notification marked as read']);
+    }
+
     public function markAllNotificationsRead()
     {
         Auth::user()->notifications()->where('is_read', false)->update(['is_read' => true]);
