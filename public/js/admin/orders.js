@@ -1,6 +1,9 @@
+// Handles all order-related functionality (view, update status, calendar view)
 class OrdersHandler {
     constructor() {
+        // Get CSRF token for security
         this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // Get reference to the order details modal
         this.modal = document.getElementById('orderModal');
         if (!this.modal) {
             console.error('Order modal not found!');
@@ -8,15 +11,18 @@ class OrdersHandler {
         this.init();
     }
 
+    // Initialize - load orders and set up event listeners
     init() {
         this.loadOrders();
         this.bindEvents();
     }
 
+    // Set up event listeners (status filter dropdown)
     bindEvents() {
         document.getElementById('statusFilter')?.addEventListener('change', () => this.loadOrders());
     }
 
+    // Loads orders from the server with optional status filter
     async loadOrders() {
         const status = document.getElementById('statusFilter')?.value || '';
         const grid = document.getElementById('ordersGrid');
@@ -26,6 +32,7 @@ class OrdersHandler {
             return;
         }
 
+        // Show loading message
         grid.innerHTML = '<div class="loading">Loading orders...</div>';
 
         try {
@@ -42,6 +49,7 @@ class OrdersHandler {
         }
     }
 
+    // Displays all orders as cards in the grid
     renderOrders(orders) {
         const grid = document.getElementById('ordersGrid');
         if (!orders.length) {
@@ -50,10 +58,16 @@ class OrdersHandler {
         }
 
         grid.innerHTML = orders.map(order => {
+            // Convert payment method code to readable text
             const paymentMethod = order.payment_method === 'gcash' ? 'E-Wallet' : 
                                order.payment_method === 'bank' ? 'Bank' : 
                                order.payment_method === 'cod' ? 'COD' : 'N/A';
             
+            // Get shipping info from either direct columns or shipping relationship
+            const shippingName = order.shipping_name || order.shipping?.shipping_name || 'N/A';
+            const shippingPhone = order.shipping_phone || order.shipping?.shipping_phone || 'N/A';
+            
+            // Create HTML for each order card
             return `
             <div class="order-card">
                 <div class="order-header">
@@ -62,6 +76,7 @@ class OrdersHandler {
                 </div>
                 <div class="order-info">
                     <p><strong>Customer:</strong> ${order.user?.name || 'N/A'}</p>
+                    <p><strong>Contact:</strong> ${shippingPhone}</p>
                     <p><strong>Total:</strong> ₱${Number(order.total_amount).toFixed(2)}</p>
                     <p><strong>Payment:</strong> ${paymentMethod} <span class="status-badge status-${order.payment_status}">${order.payment_status || 'pending'}</span></p>
                     <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleDateString()}</p>
@@ -73,6 +88,7 @@ class OrdersHandler {
                         <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
                         <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
                         <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                         <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                     </select>
                 </div>
@@ -80,6 +96,44 @@ class OrdersHandler {
         `}).join('');
     }
 
+        grid.innerHTML = orders.map(order => {
+            const paymentMethod = order.payment_method === 'gcash' ? 'E-Wallet' : 
+                               order.payment_method === 'bank' ? 'Bank' : 
+                               order.payment_method === 'cod' ? 'COD' : 'N/A';
+            
+            // Get shipping info from either direct columns or shipping relationship
+            const shippingName = order.shipping_name || order.shipping?.shipping_name || 'N/A';
+            const shippingPhone = order.shipping_phone || order.shipping?.shipping_phone || 'N/A';
+            
+            return `
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-number">#${order.order_number}</span>
+                    <span class="status-badge status-${order.status}">${order.status}</span>
+                </div>
+                <div class="order-info">
+                    <p><strong>Customer:</strong> ${order.user?.name || 'N/A'}</p>
+                    <p><strong>Contact:</strong> ${shippingPhone}</p>
+                    <p><strong>Total:</strong> ₱${Number(order.total_amount).toFixed(2)}</p>
+                    <p><strong>Payment:</strong> ${paymentMethod} <span class="status-badge status-${order.payment_status}">${order.payment_status || 'pending'}</span></p>
+                    <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleDateString()}</p>
+                    ${order.delivery_date ? `<p><strong>Delivery:</strong> 📅 ${new Date(order.delivery_date).toLocaleDateString()}</p>` : ''}
+                </div>
+                <div class="order-actions">
+                    <button class="btn btn-secondary" onclick="viewOrder(${order.id})">View Details</button>
+                    <select onchange="updateOrderStatus(${order.id}, this.value)" class="status-select">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                        <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>delivered</option>
+                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+        `}).join('');
+    }
+
+    // Loads a single order's details and shows them in the modal
     async viewOrder(id) {
         try {
             const response = await fetch(`/admin/orders/${id}`, {
@@ -98,15 +152,23 @@ class OrdersHandler {
         }
     }
 
+    // Displays the full order details in the modal popup
     showOrderDetails(order) {
         const details = document.getElementById('orderDetails');
+        // Check if the order has a payment receipt uploaded
         const hasReceipt = order.payment_receipt;
         
         const paymentMethod = order.payment_method === 'gcash' ? 'E-Wallet' : 
                            order.payment_method === 'bank' ? 'Bank' : 
                            order.payment_method === 'cod' ? 'COD' : 'N/A';
         
-        const shipping = order.shipping || {};
+        // Get shipping info (could be in order table directly or in related shipping table)
+        const shippingName = order.shipping_name || order.shipping?.shipping_name || 'N/A';
+        const shippingPhone = order.shipping_phone || order.shipping?.shipping_phone || 'N/A';
+        const shippingAddress = order.shipping_address || order.shipping?.shipping_address || 'N/A';
+        const deliveryDate = order.delivery_date || order.shipping?.delivery_date || null;
+        const deliveryTime = order.delivery_time || order.shipping?.delivery_time || null;
+        const deliveryNotes = order.delivery_notes || order.shipping?.delivery_notes || null;
         
         details.innerHTML = `
             <div class="detail-section">
@@ -123,12 +185,12 @@ class OrdersHandler {
             </div>
             <div class="detail-section">
                 <h4>Delivery Address</h4>
-                <p><strong>Name:</strong> ${shipping.shipping_name || 'N/A'}</p>
-                <p><strong>Phone:</strong> ${shipping.shipping_phone || 'N/A'}</p>
-                <p><strong>Address:</strong> ${shipping.shipping_address || 'N/A'}</p>
-                ${shipping.delivery_date ? `<p><strong>Delivery Date:</strong> ${shipping.delivery_date}</p>` : ''}
-                ${shipping.delivery_time ? `<p><strong>Delivery Time:</strong> ${shipping.delivery_time}</p>` : ''}
-                ${shipping.delivery_notes ? `<p><strong>Notes:</strong> ${shipping.delivery_notes}</p>` : ''}
+                <p><strong>Name:</strong> ${shippingName}</p>
+                <p><strong>Phone:</strong> ${shippingPhone}</p>
+                <p><strong>Address:</strong> ${shippingAddress}</p>
+                ${deliveryDate ? `<p><strong>Delivery Date:</strong> ${deliveryDate}</p>` : ''}
+                ${deliveryTime ? `<p><strong>Delivery Time:</strong> ${deliveryTime}</p>` : ''}
+                ${deliveryNotes ? `<p><strong>Notes:</strong> ${deliveryNotes}</p>` : ''}
             </div>
             ${hasReceipt ? `
             <div class="detail-section">
@@ -162,20 +224,22 @@ class OrdersHandler {
                 `).join('') : '<p>No items found</p>'}
             </div>
         `;
-        this.modal.classList.add('active');
+        this.modal.classList.add('active'); // Show the modal
     }
 
+    // Closes the order details modal
     closeOrderModal() {
         this.modal.classList.remove('active');
     }
 
+    // Opens a new window to print the order
     printOrder(id) {
         const printWindow = window.open(`/admin/orders/${id}?print=true`, '_blank');
         if (!printWindow) {
             alert('Please allow popups for this site to print orders.');
             return;
         }
-        // Fallback: trigger print after a delay if onload doesn't work
+        // Trigger print after a delay to allow page to load
         setTimeout(() => {
             try {
                 printWindow.focus();
@@ -186,6 +250,7 @@ class OrdersHandler {
         }, 1000);
     }
 
+    // Updates the order status (pending, processing, completed, etc.)
     async updateOrderStatus(id, status) {
         try {
             await fetch(`/admin/orders/${id}/status`, {
@@ -196,12 +261,13 @@ class OrdersHandler {
                 },
                 body: JSON.stringify({ status }),
             });
-            this.loadOrders();
+            this.loadOrders(); // Reload orders to show updated status
         } catch (error) {
             console.error('Error updating status:', error);
         }
     }
 
+    // Verifies or rejects a payment receipt
     async verifyPayment(id, status) {
         try {
             await fetch(`/admin/orders/${id}/verify-payment`, {
@@ -212,8 +278,8 @@ class OrdersHandler {
                 },
                 body: JSON.stringify({ payment_status: status }),
             });
-            this.loadOrders();
-            this.closeOrderModal();
+            this.loadOrders(); // Reload orders
+            this.closeOrderModal(); // Close the modal
         } catch (error) {
             console.error('Error verifying payment:', error);
         }
@@ -246,6 +312,7 @@ function verifyPayment(id, status) {
     ordersHandler?.verifyPayment(id, status);
 }
 
+// Opens a modal to show the full-size payment receipt image
 function openReceiptModal(src) {
     let modal = document.getElementById('receiptModal');
     if (!modal) {
@@ -262,15 +329,18 @@ function openReceiptModal(src) {
     modal.classList.add('active');
 }
 
+// Closes the receipt image modal
 function closeReceiptModal() {
     const modal = document.getElementById('receiptModal');
     if (modal) modal.classList.remove('active');
 }
 
+// Calendar view variables
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 let allOrders = [];
 
+// Switches between grid view and calendar view
 function switchView(view) {
     document.getElementById('gridViewBtn').classList.toggle('active', view === 'grid');
     document.getElementById('calendarViewBtn').classList.toggle('active', view === 'calendar');
@@ -281,13 +351,14 @@ function switchView(view) {
     }
 }
 
+// Loads orders for the calendar view (with delivery dates)
 async function loadOrdersForCalendar() {
     try {
         const response = await fetch('/admin/orders/calendar-data');
         allOrders = await response.json();
         console.log('Calendar data loaded:', allOrders);
         
-        // Auto-navigate to month with orders
+        // Auto-navigate to the month with the first order
         if (allOrders.length > 0) {
             const firstOrderDate = new Date(allOrders[0].delivery_date);
             currentMonth = firstOrderDate.getMonth();
@@ -297,7 +368,7 @@ async function loadOrdersForCalendar() {
         renderCalendar();
     } catch (error) {
         console.error('Error loading calendar data:', error);
-        // Fallback to regular orders data
+        // Fallback: load regular orders data
         try {
             const response = await fetch('/admin/orders/data');
             allOrders = await response.json();
@@ -309,14 +380,17 @@ async function loadOrdersForCalendar() {
     }
 }
 
+// Renders the calendar view with orders on their delivery dates
 function renderCalendar() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
     document.getElementById('calendarMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
     
+    // Calculate first day of month and total days
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     
+    // Create day headers (Sun, Mon, etc.)
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let html = days.map(d => `<div class="calendar-header">${d}</div>`).join('');
     
@@ -327,7 +401,9 @@ function renderCalendar() {
     
     // Generate calendar days
     for (let day = 1; day <= daysInMonth; day++) {
+        // Format date as YYYY-MM-DD
         const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        // Find orders with this delivery date
         const dayOrders = allOrders.filter(o => {
             if (!o.delivery_date) return false;
             // Handle both "2026-04-29" and "2026-04-29 00:00:00" formats
@@ -335,6 +411,7 @@ function renderCalendar() {
             return orderDate === dateStr;
         });
         
+        // Create HTML for each day with its orders
         html += `
             <div class="calendar-day ${dayOrders.length > 0 ? 'has-orders' : ''}">
                 <div class="calendar-day-number">${day}</div>
@@ -351,8 +428,10 @@ function renderCalendar() {
     document.getElementById('calendarGrid').innerHTML = html;
 }
 
+// Changes the displayed month (delta = -1 for previous, +1 for next)
 function changeMonth(delta) {
     currentMonth += delta;
+    // Wrap around if going past December or before January
     if (currentMonth > 11) {
         currentMonth = 0;
         currentYear++;

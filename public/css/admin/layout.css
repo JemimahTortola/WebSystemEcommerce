@@ -1,31 +1,38 @@
+/* ============================================
+   Admin Layout CSS - Main admin interface styles
+   ============================================ */
+
+/* CSS variables for consistent colors and spacing */
 :root {
-    --sidebar-width: 260px;
-    --topbar-height: 70px;
+    --sidebar-width: 260px;      /* Width of the left sidebar */
+    --topbar-height: 70px;        /* Height of the top bar */
     --white: #ffffff;
-    --primary: #e8a5aa;
-    --primary-dark: #d4898f;
-    --text-dark: #2d2d2d;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --light-bg: #f9fafb;
-    --sidebar-bg: #2d2d2d;
-    --sidebar-text: #e5e7eb;
-    --sidebar-hover: #3d3d3d;
-    --sidebar-active: #e8a5aa;
---success: #10b981;
-    --warning: #f59e0b;
-    --error: #ef4444;
-    --info: #3b82f6;
-    --radius: 8px;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --primary: #e8a5aa;           /* Main brand color (pink) */
+    --primary-dark: #d4898f;       /* Darker pink for hover states */
+    --text-dark: #2d2d2d;         /* Main text color */
+    --text-muted: #6b7280;         /* Muted text color */
+    --border: #e5e7eb;            /* Border color */
+    --light-bg: #f9fafb;           /* Light background color */
+    --sidebar-bg: #2d2d2d;        /* Dark sidebar background */
+    --sidebar-text: #e5e7eb;       /* Sidebar text color */
+    --sidebar-hover: #3d3d3d;      /* Sidebar hover background */
+    --sidebar-active: #e8a5aa;      /* Active sidebar item color */
+    --success: #10b981;             /* Green for success messages */
+    --warning: #f59e0b;            /* Orange for warnings */
+    --error: #ef4444;              /* Red for errors */
+    --info: #3b82f6;               /* Blue for info */
+    --radius: 8px;                 /* Border radius for rounded corners */
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
 }
 
+/* Reset all elements to have consistent box sizing */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Base body styles */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--light-bg);
@@ -33,30 +40,34 @@ body {
     line-height: 1.5;
 }
 
+/* Main layout container - sidebar + main content */
 .admin-layout {
     display: flex;
-    min-height: 100vh;
+    min-height: 100vh;  /* Full viewport height */
 }
 
+/* Sidebar - fixed left navigation */
 .admin-sidebar {
-    position: fixed;
+    position: fixed;       /* Stays in place when scrolling */
     left: 0;
     top: 0;
     width: var(--sidebar-width);
-    height: 100vh;
+    height: 100vh;           /* Full viewport height */
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
-    z-index: 100;
+    z-index: 100;            /* Above other content */
     display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
+    flex-direction: column;  /* Stack items vertically */
+    transition: transform 0.3s ease;  /* Smooth slide animation */
 }
 
+/* Sidebar header - logo area */
 .sidebar-header {
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);  /* Subtle divider */
 }
 
+/* Logo text in sidebar */
 .sidebar-logo {
     font-size: 1.5rem;
     font-weight: 700;
@@ -64,28 +75,33 @@ body {
     text-decoration: none;
 }
 
+/* "Admin" text in logo - uses primary color */
 .sidebar-logo span {
     color: var(--primary);
 }
 
+/* Navigation section container - scrollable */
 .sidebar-nav {
     flex: 1;
     padding: 1rem 0;
-    overflow-y: auto;
+    overflow-y: auto;  /* Scroll if content overflows */
 }
 
+/* Section divider in sidebar */
 .nav-section {
     margin-bottom: 1rem;
 }
 
+/* Section title (e.g., "Catalog", "Sales") */
 .nav-section-title {
     padding: 0.5rem 1.5rem;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.4);  /* Faded white */
 }
 
+/* Individual navigation link */
 .nav-item {
     display: flex;
     align-items: center;
@@ -93,7 +109,7 @@ body {
     padding: 0.75rem 1.5rem;
     color: var(--sidebar-text);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.2s;  /* Smooth hover transition */
     font-size: 0.95rem;
 }
 
@@ -102,30 +118,34 @@ body {
     color: var(--white);
 }
 
+/* Active page highlight */
 .nav-item.active {
-    background: var(--sidebar-active);
+    background: var(--sidebar-active);  /* Pink background */
     color: var(--white);
 }
 
 .nav-item svg {
     width: 20px;
     height: 20px;
-    flex-shrink: 0;
+    flex-shrink: 0;  /* Don't shrink icon */
 }
 
+/* Sidebar footer area (logout button) */
 .sidebar-footer {
     padding: 1rem 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);  /* Subtle divider */
 }
 
+/* Main content area (to the right of sidebar) */
 .admin-main {
     flex: 1;
-    margin-left: var(--sidebar-width);
+    margin-left: var(--sidebar-width);  /* Push content past sidebar */
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;  /* Stack topbar + content vertically */
 }
 
+/* Top bar - stays at top when scrolling */
 .admin-topbar {
     position: sticky;
     top: 0;
@@ -136,17 +156,19 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    z-index: 50;
+    z-index: 50;  /* Above other content */
 }
 
+/* Left side of top bar (menu toggle + title) */
 .topbar-left {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
+/* Hamburger menu button (shown on mobile only) */
 .menu-toggle {
-    display: none;
+    display: none;  /* Hidden on desktop */
     background: none;
     border: none;
     cursor: pointer;
@@ -159,51 +181,59 @@ body {
     color: var(--text-dark);
 }
 
+/* Page title in top bar */
 .topbar-title {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-dark);
 }
 
+/* Right side of top bar (search, notifications, user menu) */
 .topbar-right {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
+/* Search bar container */
 .topbar-search {
     position: relative;
 }
 
+/* Search input field */
 .search-input {
     width: 250px;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;  /* Left padding for icon */
     border: 1px solid var(--border);
     border-radius: var(--radius);
     font-size: 0.875rem;
-    transition: all 0.2s;
+    transition: all 0.2s;  /* Smooth width change on focus */
 }
 
+/* Search input when clicked/typed in */
 .search-input:focus {
     outline: none;
-    border-color: var(--primary);
-    width: 300px;
+    border-color: var(--primary);  /* Pink border */
+    width: 300px;  /* Expand slightly */
 }
 
+/* Search icon inside the input */
 .search-icon {
     position: absolute;
     left: 0.75rem;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%);  /* Center vertically */
     color: var(--text-muted);
 }
 
+/* Container for notification bell and other action buttons */
 .topbar-actions {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
+/* Generic button style in top bar */
 .topbar-btn {
     position: relative;
     background: none;
@@ -212,7 +242,7 @@ body {
     padding: 0.5rem;
     border-radius: var(--radius);
     color: var(--text-muted);
-    transition: all 0.2s;
+    transition: all 0.2s;  /* Smooth hover effect */
 }
 
 .topbar-btn:hover {
@@ -225,29 +255,31 @@ body {
     height: 20px;
 }
 
+/* Red badge showing unread notification count */
 .notification-badge {
     position: absolute;
     top: 0;
     right: 0;
     width: 18px;
     height: 18px;
-    background: var(--error);
+    background: var(--error);  /* Red background */
     color: var(--white);
     font-size: 0.7rem;
     font-weight: 600;
-    border-radius: 50%;
+    border-radius: 50%;  /* Circle */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* User menu (Visit Shop + Logout buttons) */
 .user-menu {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-left: 1rem;
     padding-left: 1rem;
-    border-left: 1px solid var(--border);
+    border-left: 1px solid var(--border);  /* Divider line */
 }
 
 .topbar-btn {
@@ -307,11 +339,13 @@ body {
     color: var(--text-muted);
 }
 
+/* Main content area below top bar */
 .admin-content {
     flex: 1;
-    padding: 2rem;
+    padding: 2rem;  /* Space around content */
 }
 
+/* Dark overlay behind modals */
 .overlay {
     display: none;
     position: fixed;
@@ -319,18 +353,35 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);  /* Semi-transparent black */
     z-index: 90;
 }
 
+/* Show overlay when modal is active */
 .overlay.active {
     display: block;
 }
 
+/* ============================================
+   Responsive Design - Tablet and Mobile
+   ============================================ */
 @media (max-width: 1024px) {
     .admin-sidebar {
-        transform: translateX(-100%);
+        transform: translateX(-100%);  /* Hide sidebar off-screen */
     }
+
+    .admin-sidebar.open {
+        transform: translateX(0);  /* Show sidebar when open */
+    }
+
+    .admin-main {
+        margin-left: 0;  /* Full width content */
+    }
+
+    .menu-toggle {
+        display: block;  /* Show hamburger menu */
+    }
+}
 
     .admin-sidebar.open {
         transform: translateX(0);
@@ -359,6 +410,7 @@ body {
     }
 }
 
+/* Wraps notification bell and dropdown */
 .notification-wrapper {
     position: relative;
 }
@@ -376,6 +428,7 @@ body {
     text-align: center;
 }
 
+/* Notification dropdown panel */
 .notification-dropdown {
     display: none;
     position: absolute;
@@ -384,11 +437,12 @@ body {
     width: 350px;
     background: var(--white);
     border-radius: var(--radius);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);  /* Drop shadow */
     z-index: 1000;
     margin-top: 0.5rem;
 }
 
+/* Show dropdown when active */
 .notification-dropdown.active {
     display: block;
 }

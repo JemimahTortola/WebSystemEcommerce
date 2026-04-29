@@ -18,7 +18,7 @@
         <!-- Product Main Info -->
         <div class="product-main">
             <div class="product-image-section">
-                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="main-product-image">
+                <img src="{{ $product->image ? (str_starts_with($product->image, 'products/') ? '/storage/' . $product->image : $product->image) : 'https://via.placeholder.com/400' }}" alt="{{ $product->name }}" class="main-product-image">
             </div>
             
             <div class="product-info-section">
@@ -129,7 +129,7 @@
             <div class="related-products-grid">
                 @foreach($relatedProducts as $related)
                 <div class="related-product-card" onclick="window.location.href='{{ route('shop.product', $related->slug) }}'">
-                    <img src="{{ $related->image }}" alt="{{ $related->name }}">
+                    <img src="{{ $related->image ? (str_starts_with($related->image, 'products/') ? '/storage/' . $related->image : $related->image) : 'https://via.placeholder.com/400' }}" alt="{{ $related->name }}">
                     <div class="related-info">
                         <h4>{{ $related->name }}</h4>
                         <span class="price">₱{{ number_format($related->price, 0) }}</span>

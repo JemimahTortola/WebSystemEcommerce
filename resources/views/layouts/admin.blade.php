@@ -3,16 +3,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- CSRF token for security - used by JavaScript to make authorized requests --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin - Flourista')</title>
+    {{-- Load admin stylesheets --}}
     <link rel="stylesheet" href="{{ asset('css/admin/layout.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+    {{-- Page-specific styles --}}
     @yield('styles')
     @stack('styles')
 </head>
 <body>
     <div class="admin-layout">
+        {{-- Sidebar navigation - contains links to all admin pages --}}
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <a href="{{ route('admin.dashboard') }}" class="sidebar-logo">
@@ -69,12 +73,13 @@
                             Reviews
                         </a>
                     </div>
-                </nav>
-            </aside>
+        </nav>
+    </aside>
 
-        <div class="overlay"></div>
+    <div class="overlay"></div>
 
         <main class="admin-main">
+            {{-- Top bar with menu toggle and page title --}}
             <header class="admin-topbar">
                 <div class="topbar-left">
                     <button class="menu-toggle">
@@ -86,6 +91,7 @@
                 </div>
 
                 <div class="topbar-right">
+                    {{-- Search bar (visual only, not functional) --}}
                     <div class="topbar-search">
                         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -94,6 +100,7 @@
                     </div>
 
                     <div class="topbar-actions">
+                        {{-- Notification bell with dropdown --}}
                         <div class="notification-wrapper">
                             <button class="topbar-btn" id="notificationBtn" title="Notifications">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,12 +121,14 @@
                     </div>
 
                     <div class="user-menu">
+                        {{-- Link to visit the shop --}}
                         <a href="{{ route('shop') }}" class="topbar-btn" title="Visit Shop" target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                             Visit Shop
                         </a>
+                        {{-- Logout form with CSRF protection --}}
                         <form method="POST" action="{{ route('admin.logout') }}" style="display: inline;">
                             @csrf
                             <button type="submit" class="topbar-btn" title="Logout">
@@ -139,8 +148,10 @@
         </main>
     </div>
 
+    {{-- Load admin layout JavaScript --}}
     <script src="{{ asset('js/admin/layout.js') }}"></script>
     
+    {{-- Page-specific scripts --}}
     @yield('scripts')
     @stack('scripts')
 </body>

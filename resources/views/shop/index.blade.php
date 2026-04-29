@@ -41,7 +41,7 @@
                 @forelse($products as $product)
                 <div class="product-card" onclick="window.location.href='{{ route('shop.product', $product->slug) }}'">
                     <div class="product-image-wrapper">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="product-image">
+                        <img src="{{ $product->image ? (str_starts_with($product->image, 'products/') ? '/storage/' . $product->image : $product->image) : 'https://via.placeholder.com/400' }}" alt="{{ $product->name }}" class="product-image">
                         <button class="btn-add-cart" data-product-id="{{ $product->id }}" onclick="event.stopPropagation()" {{ $product->stock < 1 ? 'disabled' : '' }}>Add to Cart</button>
                     </div>
                     <div class="product-info">
