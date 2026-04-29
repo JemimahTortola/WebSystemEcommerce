@@ -1,12 +1,15 @@
+// Handles dashboard data loading and rendering (stats, charts, tables)
 class DashboardHandler {
     constructor() {
         this.init();
     }
 
+    // Initialize - load dashboard data
     init() {
         this.loadDashboard();
     }
 
+    // Fetches dashboard data from server
     async loadDashboard() {
         try {
             const response = await fetch('/admin/dashboard-data');
@@ -22,17 +25,20 @@ class DashboardHandler {
         }
     }
 
+    // Updates dashboard widgets with fetched data
     renderDashboard(data) {
         const revenueEl = document.getElementById('totalRevenue');
         const ordersEl = document.getElementById('totalOrders');
         const customersEl = document.getElementById('totalCustomers');
         const productsEl = document.getElementById('totalProducts');
         
+        // Update stat cards (with null checks)
         if (revenueEl) revenueEl.textContent = `₱${data.total_revenue || '0.00'}`;
         if (ordersEl) ordersEl.textContent = data.total_orders || 0;
         if (customersEl) customersEl.textContent = data.total_customers || 0;
         if (productsEl) productsEl.textContent = data.total_products || 0;
 
+        // Render recent orders list
         const recentOrders = document.getElementById('recentOrders');
         if (recentOrders && data.recent_orders && data.recent_orders.length > 0) {
             recentOrders.innerHTML = data.recent_orders.map(order => `
@@ -49,6 +55,7 @@ class DashboardHandler {
             recentOrders.innerHTML = '<p class="empty-state-text">No orders yet</p>';
         }
 
+        // Render top products list
         const topProducts = document.getElementById('topProducts');
         if (topProducts && data.top_products && data.top_products.length > 0) {
             topProducts.innerHTML = data.top_products.map((product, i) => `
@@ -64,6 +71,7 @@ class DashboardHandler {
             topProducts.innerHTML = '<p class="empty-state-text">No products yet</p>';
         }
 
+        // Render inventory status cards (in stock, low stock, out of stock)
         const inventoryStatus = document.getElementById('inventoryStatus');
         if (inventoryStatus) {
             const inv = data.inventory || { in_stock: 0, low_stock: 0, out_of_stock: 0 };
@@ -85,6 +93,7 @@ class DashboardHandler {
     }
 }
 
+// Initialize dashboard when page loads
 document.addEventListener('DOMContentLoaded', () => {
     new DashboardHandler();
 });

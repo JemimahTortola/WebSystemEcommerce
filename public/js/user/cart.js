@@ -1,3 +1,4 @@
+// Handles all cart functionality (add, update, remove, count)
 if (!window.CartHandler) {
     window.CartHandler = class CartHandler {
         constructor() {
@@ -6,20 +7,23 @@ if (!window.CartHandler) {
             this.init();
         }
 
+        // Initialize - update count, bind events, load items if on cart page
         init() {
             this.updateCartCount();
             this.bindEvents();
             if (document.getElementById('cartGrid')) {
-                this.loadCartItems();
+                this.loadCartItems();  // Load cart items if on cart page
             }
         }
 
+        // Bind click events to "Add to Cart" buttons
         bindEvents() {
             // Don't bind on product pages - product.js handles those
             if (document.querySelector('.delivery-date-input')) {
                 return;
             }
             
+            // Add click handlers to all "Add to Cart" buttons
             const buttons = document.querySelectorAll('.btn-add-cart');
             buttons.forEach(btn => {
                 btn.onclick = (e) => {
@@ -32,6 +36,7 @@ if (!window.CartHandler) {
             });
         }
 
+        // Extracts product ID from a product card element
         getProductIdFromElement(btn) {
             const card = btn.closest('.product-card');
             if (card) {
@@ -44,6 +49,7 @@ if (!window.CartHandler) {
             return null;
         }
 
+        // Loads cart items from server
         async loadCartItems() {
             try {
                 const response = await fetch('/cart', {
@@ -62,26 +68,30 @@ if (!window.CartHandler) {
             }
         }
 
+        // Displays cart items in the grid
         renderCartItems(cartItems) {
             const cartGrid = document.getElementById('cartGrid');
             const emptyCart = document.getElementById('emptyCart');
             
+            // Show empty cart message if no items
             if (!cartItems || cartItems.length === 0) {
                 cartGrid.innerHTML = '';
                 if (emptyCart) emptyCart.style.display = 'block';
                 this.updateSummary({ subtotal: 0, discount: 0, total: 0 });
                 return;
             }
-
+            
             if (emptyCart) emptyCart.style.display = 'none';
             
+            // Calculate subtotal
             let subtotal = 0;
             cartItems.forEach(item => {
                 subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
             });
-
+            
             this.updateSummary({ subtotal, discount: 0, total: subtotal });
-
+            
+            // Generate HTML for each cart item
             cartGrid.innerHTML = cartItems.map(item => {
                 const name = item.name || 'Unnamed Product';
                 const imageUrl = item.image || `https://via.placeholder.com/200x200/e8a5aa/ffffff?text=${encodeURIComponent(name)}`;

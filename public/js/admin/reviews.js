@@ -1,15 +1,21 @@
+// Handles all review-related functionality (view, comment, toggle visibility)
 class ReviewsHandler {
     constructor() {
+        // Get CSRF token for security
         this.csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // Get reference to the review modal
         this.modal = document.getElementById('reviewModal');
+        // Track which review we're currently viewing/commenting on
         this.currentReviewId = null;
         this.init();
     }
 
+    // Initialize - load reviews when page loads
     init() {
         this.loadReviews();
     }
 
+    // Loads all reviews from the server and displays them in the table
     async loadReviews() {
         try {
             const response = await fetch('/admin/reviews/data', {
@@ -22,6 +28,7 @@ class ReviewsHandler {
         }
     }
 
+    // Displays reviews in the HTML table with star ratings
     renderTable(reviews) {
         const tbody = document.getElementById('reviewsTableBody');
         if (!reviews.length) {
@@ -29,6 +36,7 @@ class ReviewsHandler {
             return;
         }
 
+        // Create HTML for each review row (with star rating display)
         tbody.innerHTML = reviews.map(r => `
             <tr>
                 <td>${r.product?.name || 'N/A'}</td>
@@ -43,6 +51,7 @@ class ReviewsHandler {
         `).join('');
     }
 
+    // Loads a single review and opens the comment modal
     async viewReview(id) {
         try {
             const response = await fetch(`/admin/reviews/${id}`);
@@ -57,10 +66,12 @@ class ReviewsHandler {
         }
     }
 
+    // Displays the review details and admin comment form in the modal
     showReviewModal(review) {
         this.currentReviewId = review.id;
         const details = document.getElementById('reviewDetails');
         
+        // Build HTML with review info and comment
         let html = `
             <div style="margin-bottom: 1rem;">
                 <strong>Product:</strong> ${review.product?.name || 'N/A'}<br>
@@ -73,7 +84,8 @@ class ReviewsHandler {
                 <p style="margin-top: 0.5rem; padding: 1rem; background: #f9fafb; border-radius: 4px;">${review.comment || 'No comment'}</p>
             </div>
         `;
-
+        
+        // Show existing admin comment if present
         if (review.admin_comment) {
             html += `
                 <div style="margin-bottom: 1rem;">
@@ -82,17 +94,19 @@ class ReviewsHandler {
                 </div>
             `;
         }
-
+        
         details.innerHTML = html;
         document.getElementById('adminComment').value = review.admin_comment || '';
-        this.modal.classList.add('active');
+        this.modal.classList.add('active'); // Show the modal
     }
 
+    // Closes the review modal
     closeReviewModal() {
         this.modal.classList.remove('active');
         this.currentReviewId = null;
     }
 
+    // Saves the admin's comment on a review
     async saveAdminComment() {
         const comment = document.getElementById('adminComment').value;
         
@@ -113,7 +127,7 @@ class ReviewsHandler {
             const result = await response.json();
             if (result.message) {
                 this.closeReviewModal();
-                this.loadReviews();
+                this.loadReviews(); // Reload the reviews table
             }
         } catch (error) {
             console.error('Error saving admin comment:', error);
@@ -121,25 +135,29 @@ class ReviewsHandler {
         }
     }
 
+    // Toggles review visibility (show/hide on shop)
     async toggleReview(id) {
         try {
             await fetch(`/admin/reviews/${id}/toggle`, {
                 method: 'PUT',
                 headers: { 'X-CSRF-TOKEN': this.csrfToken },
             });
-            this.loadReviews();
+            this.loadReviews(); // Reload the table
         } catch (error) {
             console.error('Error toggling review:', error);
         }
     }
 }
 
+// Create global instance
 let reviewsHandler;
 
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
     reviewsHandler = new ReviewsHandler();
 });
 
+// Global functions for HTML buttons
 function viewReview(id) {
     reviewsHandler?.viewReview(id);
 }
@@ -152,6 +170,7 @@ function saveAdminComment() {
     reviewsHandler?.saveAdminComment();
 }
 
+// Toggle review visibility
 function toggleReview(id) {
     reviewsHandler?.toggleReview(id);
 }
