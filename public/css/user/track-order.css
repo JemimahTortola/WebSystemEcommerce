@@ -100,3 +100,12 @@
     color: var(--text-muted);
     margin-bottom: 0.5rem;
 }
+
+.timeline-cancelled {
+    background: #f8d7da;
+    color: #9c2c3c;
+    padding: 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+    font-weight: 600;
+}

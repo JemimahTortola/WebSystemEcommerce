@@ -1,5 +1,15 @@
+/* ============================================
+   USER CHECKOUT PAGE STYLES
+   - Checkout form (shipping, payment)
+   - Order summary sidebar
+   - Address selection
+   ============================================ */
+
 .checkout-page {
-    padding: 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    align-items: start;
 }
 
 .checkout-layout {

@@ -1,7 +1,12 @@
 /* ========================================================
    ADMIN DASHBOARD STYLES
+   - Stats cards (revenue, orders, customers, products)
+   - Recent orders list
+   - Top products list
+   - Inventory status
    ======================================================== */
 
+/* Page header */
 .dashboard-header {
     margin-bottom: 2rem;
 }

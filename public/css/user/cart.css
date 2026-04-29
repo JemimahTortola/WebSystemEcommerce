@@ -2,10 +2,18 @@
    SHOPPING CART PAGE STYLES
    ======================================================== */
 
+/* ============================================
+   USER CART PAGE STYLES
+   - Cart items grid
+   - Order summary sidebar
+   - Coupon input
+   ============================================ */
+
 .cart-page {
-    padding: 2rem 0 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: start;
 }
 
 .cart-page .page-header {

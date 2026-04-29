@@ -1,3 +1,10 @@
+/* ============================================
+   USER SHOP PAGE STYLES
+   - Sidebar with categories
+   - Product grid
+   - Filters and sorting
+   ============================================ */
+
 .shop-page {
     display: flex;
     gap: 2rem;

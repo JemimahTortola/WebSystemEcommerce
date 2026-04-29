@@ -1,3 +1,10 @@
+/* ============================================
+   ADMIN CATEGORIES PAGE STYLES
+   - Categories table
+   - Modal form
+   ============================================ */
+
+/* Wrapper for the categories table */
 .data-table-wrapper {
     background: var(--white);
     border-radius: var(--radius);

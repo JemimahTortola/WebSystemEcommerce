@@ -85,9 +85,8 @@
 }
 
 .status-pill.pending { background: #fff3cd; color: #b08905; }
-.status-pill.confirmed { background: #cce5ff; color: #004085; }
-.status-pill.preparing { background: #d1ecf1; color: #0c5460; }
-.status-pill.shipped { background: #d4edda; color: #2f6f3e; }
+.status-pill.processing { background: #cce5ff; color: #004085; }
+.status-pill.completed { background: #d1ecf1; color: #0c5460; }
 .status-pill.delivered { background: #d4edda; color: #2f6f3e; }
 .status-pill.cancelled { background: #f8d7da; color: #9c2c3c; }
 

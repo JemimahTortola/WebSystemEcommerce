@@ -2,10 +2,14 @@
    ORDERS LIST PAGE STYLES - MODERN DESIGN
    ======================================================== */
 
+/* ============================================
+   USER ORDERS PAGE STYLES
+   - Orders list/table
+   - Order status badges
+   ============================================ */
+
 .orders-page {
-    padding: 2rem 0 4rem;
-    max-width: 900px;
-    margin: 0 auto;
+    padding: 2rem 0;
 }
 
 .orders-page .page-header {
@@ -116,20 +120,14 @@
     color: #b08905;
 }
 
-.order-status-badge.confirmed {
+.order-status-badge.processing {
     background: #cce5ff;
     color: #004085;
 }
 
-.order-status-badge.preparing {
+.order-status-badge.completed {
     background: #d1ecf1;
     color: #0c5460;
-}
-
-.order-status-badge.shipped,
-.order-status-badge.out_for_delivery {
-    background: #d4edda;
-    color: #2f6f3e;
 }
 
 .order-status-badge.delivered {

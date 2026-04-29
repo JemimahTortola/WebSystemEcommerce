@@ -1,3 +1,11 @@
+/* ============================================
+   ADMIN USERS PAGE STYLES
+   - Users table
+   - Status badges (online, banned, offline)
+   - Ban modal
+   ============================================ */
+
+/* Wrapper for the users table */
 .data-table-wrapper {
     background: var(--white);
     border-radius: var(--radius);

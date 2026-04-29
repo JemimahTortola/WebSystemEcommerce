@@ -4,11 +4,21 @@
     gap: 1.5rem;
 }
 
+/* ============================================
+   ADMIN ORDERS PAGE STYLES
+   - Order cards in grid view
+   - Order details modal
+   - Calendar view
+   - Status badges
+   ============================================ */
+
+/* Individual order card */
 .order-card {
     background: var(--white);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
     padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
 }
 
 .order-header {
@@ -208,6 +218,7 @@
 .calendar-order.pending { background: #f59e0b; }
 .calendar-order.processing { background: #3b82f6; }
 .calendar-order.completed { background: #10b981; }
+.calendar-order.delivered { background: #059669; }
 .calendar-order.cancelled { background: #ef4444; }
 
 .calendar-navigation {

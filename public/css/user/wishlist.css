@@ -1,7 +1,11 @@
+/* ============================================
+   USER WISHLIST PAGE STYLES
+   - Wishlist grid
+   - Remove from wishlist button
+   ============================================ */
+
 .wishlist-page {
-    padding: 2rem 0 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 2rem 0;
 }
 
 .wishlist-page .page-header {

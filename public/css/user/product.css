@@ -1,5 +1,16 @@
+/* ============================================
+   USER PRODUCT DETAIL PAGE STYLES
+   - Product image
+   - Product info (price, description, etc.)
+   - Reviews section
+   - Related products
+   ============================================ */
+
 .product-detail-page {
-    padding: 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
 }
 
 .product-main {
